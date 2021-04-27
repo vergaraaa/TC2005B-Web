@@ -1,0 +1,48 @@
+* {
+    font-family: 'Trade Gothic LT W01 Roman';
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow: hidden;
+}
+
+#background-video {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    min-width: 120%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1000;
+    overflow: hidden;
+}
+
+.login-form {
+    background-image: linear-gradient(70deg, #f30, #f90);
+    border: none;
+}
+
+.title {
+    text-align: center;
+    color: white;
+}
+
+.mybtn {
+    color: rgb(255, 131, 0);
+    background-color: white;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.mybtn:hover {
+    background-color: rgb(102, 102, 102);
+    color: white;
+}
+
+#logo {
+    background-color: white;
+    width: 50%;
+}
