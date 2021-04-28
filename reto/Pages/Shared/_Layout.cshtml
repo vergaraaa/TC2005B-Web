@@ -1,11 +1,16 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="~/img/icon.ico" />
     <title>@ViewData["Title"] - Asistente de Entrenamiento de Inspector</title>
+    <!-- FONT AWESOME CDN -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <!-- BOOTSTRAP CDN -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- MY STYLES -->
     <link rel="stylesheet" href="~/css/styles.css" type="text/css" />
 </head>
 <body>
@@ -20,13 +25,16 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item ms-5 me-5">
-                            <a class="nav-link ml-4 px-5 @(Context.Request.Path == "/Profile" ? "active": "")" asp-area="" asp-page="/Profile">PERFIL</a>
+                            <a class="nav-link ml-4 px-3 @(Context.Request.Path == "/Profile" ? "active": "")" asp-area="" asp-page="/Profile">PERFIL</a>
                         </li>
                         <li class="nav-item me-5">
-                            <a class="nav-link ml-4 px-5 @(Context.Request.Path == "/Play" ? "active": "")" asp-area="" asp-page="/Play">JUGAR</a>
+                            <a class="nav-link ml-4 px-3 @(Context.Request.Path == "/Play" ? "active": "")" asp-area="" asp-page="/Play">JUGAR</a>
                         </li>
                         <li class="nav-item me-5">
-                            <a class="nav-link ml-4 px-5 @(Context.Request.Path == "/Leaderboard" ? "active": "")" asp-area="" asp-page="/Leaderboard">LEADERBOARD</a>
+                            <a class="nav-link ml-4 px-3 @(Context.Request.Path == "/Exam" ? "active": "")" asp-area="" asp-page="/Exam">EXAMEN</a>
+                        </li>
+                        <li class="nav-item me-5">
+                            <a class="nav-link ml-4 px-3 @(Context.Request.Path == "/Leaderboard" ? "active": "")" asp-area="" asp-page="/Leaderboard">LEADERBOARD</a>
                         </li>
                         <li class="nav-item ml-auto">
                             <a class="nav-link" asp-area="" asp-page="/Index"><i class="fas fa-sign-out-alt"></i></a>
