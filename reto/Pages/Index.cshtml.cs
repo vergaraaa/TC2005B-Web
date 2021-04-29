@@ -31,34 +31,84 @@ namespace reto.Pages
 
         public IActionResult OnPost()
         {
-            if (Username == "edgar" || Username == "charlie" || Username == "fabiana" || Username == "ingrid" || Username == "axel")
+            // Search in data base
+            string db_string = @"server=127.0.0.1;uid=root;password=Tijuana13!;database=db_ternium";
+
+            MySqlConnection conexion = new MySqlConnection(db_string);
+            conexion.Open();
+
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conexion;
+            cmd.CommandText = "Select id_user from user where username = '" + Username + "'";
+
+            var reader = cmd.ExecuteReader();
+
+            conexion.Close();
+
+            // Errores por todos lados :( :c D:
+            if (reader.HasRows)
             {
-                int id_user = 0;
-
-                if (Username == "edgar") id_user = 1;
-                else if (Username == "charlie") id_user = 2;
-                else if (Username == "fabiana") id_user = 3;
-                else if (Username == "ingrid") id_user = 4;
-                else if (Username == "axel") id_user = 5;
-
-                /*string db_string = @"server=127.0.0.1;uid=root;password=Tijuana13!;database=db_ternium";
-                using var conexion = new MySqlConnection(db_string);
                 conexion.Open();
 
+                int id_user = Convert.ToInt32(reader["id_user"]);
                 var query = "insert into session(id_user, timestamp) values(@id_user, @timestamp)";
-                using var cmd = new MySqlCommand(query, conexion);
+                using var cmd2 = new MySqlCommand(query, conexion);
 
-                cmd.Parameters.AddWithValue("@id_user", id_user);
-                cmd.Parameters.AddWithValue("@timestamp", DateTime.Now);
-                cmd.Prepare();
+                cmd2.Parameters.AddWithValue("@id_user", id_user);
+                cmd2.Parameters.AddWithValue("@timestamp", DateTime.Now);
+                cmd2.Prepare();
 
-                cmd.ExecuteNonQuery();*/
+                cmd2.ExecuteNonQuery();
+
+                conexion.Close();
 
                 return RedirectToPage("/Profile");
             }
+            else
+            {
+                conexion.Open();
+                // Crear usuario
+                var query = "insert into user(username, type) values(@username, @type)";
+                using var cmd2 = new MySqlCommand(query, conexion);
 
-            Error = "Error";
-            return Page();
+                cmd2.Parameters.AddWithValue("@username", Username);
+                cmd2.Parameters.AddWithValue("@type", "Chatarreria");
+                cmd2.Prepare();
+
+                cmd2.ExecuteNonQuery();
+
+                conexion.Close();
+
+                // Encontrar id del usuario creado
+                conexion.Open();
+
+                query = "select id_user from user where username = " + User;
+                cmd2.Connection = conexion;
+                cmd2.CommandText = query;
+
+                var reader2 = cmd.ExecuteReader();
+
+
+                int id_user = Convert.ToInt32(reader2["id_user"]);
+                conexion.Close();
+                // Insert new user when loggs
+                conexion.Open();
+                query = "insert into session(id_user, timestamp) values(@id_user, @timestamp)";
+                cmd2.Connection = conexion;
+                cmd2.CommandText = query;
+
+                cmd2.Parameters.AddWithValue("@id_user", id_user);
+                cmd2.Parameters.AddWithValue("@timestamp", DateTime.Now);
+                cmd2.Prepare();
+
+                cmd2.ExecuteNonQuery();
+
+                conexion.Close();
+
+                return RedirectToPage("/Profile");
+            }
+            //Error = "Error";
+            //return Page();
         }
     }
 }
