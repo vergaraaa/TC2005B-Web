@@ -40,3 +40,13 @@ a.nav-link:hover {
     color: rgb(255, 131, 0) !important;
     border: solid 2px rgb(102, 102, 102) !important;
 }
+
+.table-head {
+    background-color: rgb(102, 102, 102) !important;
+    color: white !important;
+}
+
+tr.table.active {
+    background-color: rgb(72, 84, 88) !important;
+    color: white !important;
+}

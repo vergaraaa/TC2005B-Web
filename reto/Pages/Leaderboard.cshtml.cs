@@ -10,7 +10,6 @@ namespace reto.Pages
 {
     public class LeaderboardModel : PageModel
     {
-        public string Message { get; set; }
 
         private readonly ILogger<LeaderboardModel> _logger;
 

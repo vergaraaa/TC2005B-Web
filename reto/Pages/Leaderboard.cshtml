@@ -4,4 +4,106 @@
     ViewData["Title"] = "Leaderboard";
 }
 
-<h1>Leaderboard</h1>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 mb-1">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                    <input type="radio" name="type" id="option1" value="Practicas" checked> Practicas
+                </label>
+                <label class="btn btn-secondary">
+                    <input type="radio" name="type" id="option2" value="Examenes"> Examenes
+                </label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                    <input type="radio" name="date" id="option1" value="Diario" checked> Diario
+                </label>
+                <label class="btn btn-secondary">
+                    <input type="radio" name="date" id="option2" value="Mensual"> Mensual
+                </label>
+                <label class="btn btn-secondary">
+                    <input type="radio" name="options" id="option3" value="Semanal"> Semanal
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4 text-center">
+    <table class="table table-sm">
+        <thead class="table-head">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Puntos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Fabiana</td>
+                <td>13000</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Charlie</td>
+                <td>12000</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Axel</td>
+                <td>11000</td>
+            </tr>
+            <tr>
+                <th scope="row">4</th>
+                <td>Ingrid</td>
+                <td>10000</td>
+            </tr>
+            <tr>
+                <th scope="row">5</th>
+                <td>Edgar</td>
+                <td>9000</td>
+            </tr>
+            <tr>
+                <th scope="row">6</th>
+                <td>Pedro</td>
+                <td>8000</td>
+            </tr>
+            <tr>
+                <th scope="row">7</th>
+                <td>Sergio</td>
+                <td>7000</td>
+            </tr>
+            <tr>
+                <th scope="row">8</th>
+                <td>David</td>
+                <td>6000</td>
+            </tr>
+            <tr>
+                <th scope="row">9</th>
+                <td>Arturo</td>
+                <td>5000</td>
+            </tr>
+            <tr>
+                <th scope="row">10</th>
+                <td>Ernesto</td>
+                <td>4000</td>
+            </tr>
+            <tr>
+                <td scope="row">...</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="table-active">
+                <th scope="row" >13</th>
+                <td>Juan</td>
+                <td>1200</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
