@@ -31,82 +31,68 @@ namespace reto.Pages
 
         public IActionResult OnPost()
         {
-            // Search in data base
-            string db_string = @"server=127.0.0.1;uid=root;password=Tijuana13!;database=db_ternium";
+            // Definition of variables that will be reused through this method
+            int id_user;
+            string query;
 
+            // Connect to the database using our local credentials
+            string db_string = @"server=127.0.0.1;uid=root;password=Al.730550;database=db_ternium";
             MySqlConnection conexion = new MySqlConnection(db_string);
             conexion.Open();
 
-            MySqlCommand cmd = new MySqlCommand();
-            cmd.Connection = conexion;
-            cmd.CommandText = "Select id_user from user where username = '" + Username + "'";
-
+            // For better readability, use caps accordingly in sql commands
+            query = "SELECT id_user FROM user WHERE username = @username";
+            MySqlCommand cmd = new MySqlCommand(query, conexion);
+            cmd.Parameters.AddWithValue("@username", Username);
             var reader = cmd.ExecuteReader();
 
-            conexion.Close();
-
-            // Errores por todos lados :( :c D:
-            if (reader.HasRows)
+            // Read returns false when no values were obtained from the query above
+            if (!reader.Read())
             {
-                conexion.Open();
-
-                int id_user = Convert.ToInt32(reader["id_user"]);
-                var query = "insert into session(id_user, timestamp) values(@id_user, @timestamp)";
-                using var cmd2 = new MySqlCommand(query, conexion);
-
-                cmd2.Parameters.AddWithValue("@id_user", id_user);
-                cmd2.Parameters.AddWithValue("@timestamp", DateTime.Now);
-                cmd2.Prepare();
-
-                cmd2.ExecuteNonQuery();
-
+                // Closes the previous connection read to allow further queries
                 conexion.Close();
 
-                return RedirectToPage("/Profile");
+                // Creates a new user and inserts it to the users table
+                conexion.Open();
+                query = "INSERT INTO user(username, type) VALUES (@username, @type)";
+                cmd = new MySqlCommand(query, conexion);
+                cmd.Parameters.AddWithValue("@username", Username);
+                cmd.Parameters.AddWithValue("@type", "Chatarreria"); // Here Chatarreria is used as a default type
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                conexion.Close();
             }
             else
             {
-                conexion.Open();
-                // Crear usuario
-                var query = "insert into user(username, type) values(@username, @type)";
-                using var cmd2 = new MySqlCommand(query, conexion);
-
-                cmd2.Parameters.AddWithValue("@username", Username);
-                cmd2.Parameters.AddWithValue("@type", "Chatarreria");
-                cmd2.Prepare();
-
-                cmd2.ExecuteNonQuery();
-
+                // Closes the previous connection read to allow further queries
                 conexion.Close();
-
-                // Encontrar id del usuario creado
-                conexion.Open();
-
-                query = "select id_user from user where username = " + User;
-                cmd2.Connection = conexion;
-                cmd2.CommandText = query;
-
-                var reader2 = cmd.ExecuteReader();
-
-
-                int id_user = Convert.ToInt32(reader2["id_user"]);
-                conexion.Close();
-                // Insert new user when loggs
-                conexion.Open();
-                query = "insert into session(id_user, timestamp) values(@id_user, @timestamp)";
-                cmd2.Connection = conexion;
-                cmd2.CommandText = query;
-
-                cmd2.Parameters.AddWithValue("@id_user", id_user);
-                cmd2.Parameters.AddWithValue("@timestamp", DateTime.Now);
-                cmd2.Prepare();
-
-                cmd2.ExecuteNonQuery();
-
-                conexion.Close();
-
-                return RedirectToPage("/Profile");
             }
+
+            // With either an old user or one just created above, its login is recorded in the session table
+            // Part 1: The users id is recovered from the users table
+            conexion.Open();
+            query = "SELECT id_user FROM user WHERE username = @username";
+            cmd = new MySqlCommand(query, conexion);
+            cmd.Parameters.AddWithValue("@username", Username);
+            reader = cmd.ExecuteReader();
+            reader.Read();
+            id_user = Convert.ToInt32(reader["id_user"]);
+            conexion.Close();
+
+            // Part 2: The user id and the time are logged to the session table
+            conexion.Open();
+            query = "INSERT INTO session(id_user, timestamp) VALUES (@id_user, @timestamp)";
+            cmd = new MySqlCommand(query, conexion);
+            cmd.Parameters.AddWithValue("@id_user", id_user);
+            cmd.Parameters.AddWithValue("@timestamp", DateTime.Now);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+
+            // The connection to the database is closed and we can allow through the logged user
+            conexion.Close();
+            return RedirectToPage("/Profile");
+
+            // TODO: Añadir caso en el que Ternium no detecta el usuario
             //Error = "Error";
             //return Page();
         }
