@@ -3,11 +3,11 @@
 }
 
 .border-bottom {
-  border-bottom: 50px solid #e5e5e5;
+    border-bottom: 50px solid #e5e5e5;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 #logo {
@@ -19,14 +19,14 @@ a.nav-link {
     border: solid 2px rgb(255, 131, 0);
 }
 
-a.nav-link:hover {
-    background-color: white;
-    color: rgb(255, 131, 0) !important;
-    border: solid 2px rgb(255, 131, 0);
-    transition: all 0.3s ease;
-}
+    a.nav-link:hover {
+        background-color: white;
+        color: rgb(255, 131, 0) !important;
+        border: solid 2px rgb(255, 131, 0);
+        transition: all 0.3s ease;
+    }
 
-.my-bg{
+.my-bg {
     background-color: rgb(255, 131, 0) !important;
 }
 
@@ -35,18 +35,43 @@ a.nav-link:hover {
     font-weight: bold;
 }
 
-.active {
+.active-menu {
     background-color: white !important;
     color: rgb(255, 131, 0) !important;
     border: solid 2px rgb(102, 102, 102) !important;
 }
 
-.table-head {
-    background-color: rgb(102, 102, 102) !important;
+.active {
+    background-color: rgb(255, 131, 0) !important;
     color: white !important;
 }
 
-tr.table.active {
-    background-color: rgb(72, 84, 88) !important;
+.table-head {
+    background-color: rgb(102, 102, 102);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: rgb(102, 102, 102);
+}
+
+#profile {
+    border: solid 5px rgb(255, 131, 0);
+    border-radius: 50px;
+    width: 150px;
+}
+
+.mybtn {
     color: white !important;
+    background-color: rgb(255, 131, 0) !important;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.btn:active, .btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(102, 102, 102, 0.5) !important;
+}
+
+.custom-select:active, .custom-select:focus {
+    box-shadow: 0 0 0 0.2rem rgba(102, 102, 102, 0.5) !important;
 }

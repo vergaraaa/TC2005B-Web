@@ -60,3 +60,10 @@ a.nav-link:hover {
     border-radius: 50px;
     width: 150px;
 }
+
+.mybtn {
+    color: white !important;
+    background-color: rgb(255, 131, 0) !important;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}

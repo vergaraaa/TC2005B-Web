@@ -10,7 +10,6 @@ namespace reto.Pages
 {
     public class PlayModel : PageModel
     {
-        public string Message { get; set; }
 
         private readonly ILogger<PlayModel> _logger;
 
