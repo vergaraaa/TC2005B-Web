@@ -36,7 +36,7 @@ namespace reto.Pages
             string query;
 
             // Connect to the database using our local credentials
-            string db_string = @"server=127.0.0.1;uid=root;password=Al.730550;database=db_ternium";
+            string db_string = @"server=127.0.0.1;uid=root;password=Tijuana13!;database=db_ternium";
             MySqlConnection conexion = new MySqlConnection(db_string);
             conexion.Open();
 
