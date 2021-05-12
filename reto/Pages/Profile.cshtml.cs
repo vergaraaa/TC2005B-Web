@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace reto.Pages
 {
@@ -18,9 +19,11 @@ namespace reto.Pages
             _logger = logger;
         }
 
+        public string Username { get; set; }
+
         public void OnGet()
         {
-
+            Username = HttpContext.Session.GetString("username");
         }
     }
 }

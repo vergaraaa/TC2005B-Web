@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Text;
 using reto.Models;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Http;
 
 
 namespace reto.Pages
@@ -117,6 +118,10 @@ namespace reto.Pages
 
                     // The connection to the database is closed and we can allow through the logged user
                     conexion.Close();
+                    
+                    // Saver username in a session variable
+                    HttpContext.Session.SetString("username", User.Username);
+                    
                     return RedirectToPage("/Profile");
                 }
                 else
