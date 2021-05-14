@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace reto.Pages
 {
@@ -20,10 +22,14 @@ namespace reto.Pages
         }
 
         public string Username { get; set; }
+        public IList<string> Departments { get; set; }
+        public string Token { get; set; }
+        public string Id { get; set; }
 
         public void OnGet()
         {
             Username = HttpContext.Session.GetString("username");
+            Departments = JsonConvert.DeserializeObject<List<string>>(HttpContext.Session.GetString("departments"));
         }
     }
 }

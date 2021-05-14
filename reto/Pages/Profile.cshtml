@@ -17,7 +17,11 @@
             </div>
             <div class="row">
                 <div class="col text-center" style="font-size: 1.25rem">
-                    Departamento: Chatarrer&iacute;a
+                    Departamentos: <br />
+                    @foreach (var department in Model.Departments)
+                    {
+                        @department<br />
+                    }
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Net.Http;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using reto.Models;
@@ -32,7 +33,6 @@ namespace reto.Pages
 
         [BindProperty]
         public new User User { get; set; }
-
         public string Error { get; set; }
 
         public async Task<IActionResult> OnPost()
@@ -118,21 +118,25 @@ namespace reto.Pages
 
                     // The connection to the database is closed and we can allow through the logged user
                     conexion.Close();
-                    
-                    // Saver username in a session variable
+
+                    // Session variables
+                    var parsedObj = JObject.Parse(responseContent);
+                    HttpContext.Session.SetString("id", parsedObj["user"].ToString());
                     HttpContext.Session.SetString("username", User.Username);
-                    
+                    HttpContext.Session.SetString("departments", @"['Chatarreria', 'Test']");
+                    HttpContext.Session.SetString("token", parsedObj["token"].ToString());
+
                     return RedirectToPage("/Profile");
                 }
                 else
                 {
-                    Error = "Contraseña incorrecta";
+                    Error = "Credenciales incorrectas";
                     return Page();
                 }
             }
             else
             {
-                Error = "Usuario incorrecto";
+                Error = "Credenciales incorrectas";
                 return Page();
             }
         }
