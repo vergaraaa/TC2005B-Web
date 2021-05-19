@@ -9,27 +9,27 @@
         <div class="col-lg-6 mb-1">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
                 <label class="btn btn-secondary active">
-                    <input type="radio" name="type" id="option1" value=0 checked> Pr&aacute;cticas
+                    <input type="radio" name="type" id="option1" value=0> Ex&aacute;menes
                 </label>
                 <label class="btn btn-secondary">
-                    <input type="radio" name="type" id="option2" value=1> Ex&aacute;menes
+                    <input type="radio" name="type" id="option2" value=1> Pr&aacute;cticas
                 </label>
             </div>
         </div>
         <div class="col-lg-6">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-secondary active">
-                    <input type="radio" name="date" id="option1" value=0 checked> Diario
-                </label>
-                <label class="btn btn-secondary">
-                    <input type="radio" name="date" id="option2" value=1> Semanal
-                </label>
-                <label class="btn btn-secondary">
-                    <input type="radio" name="options" id="option3" value=2> Mensual
-                </label>
-            </div>
+            <form method="post">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary @(Model.OptionTime == 0 ? "active" :"")">
+                        <input type="radio" asp-for="OptionTime" value=0 name="time" id="option1"> Semanal
+                    </label>
+                    <label class="btn btn-secondary @(Model.OptionTime == 1 ? "active" :"")">
+                        <input type="radio" asp-for="OptionTime" value=1 name="time" id="option2"> Mensual
+                    </label>
+                </div>
+            </form>
         </div>
     </div>
+
 </div>
 
 <div class="container mt-4 text-center">
@@ -42,68 +42,50 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Fabiana <i class="fas fa-medal" style="color: rgb(255, 191, 0)"></i></td>
-                <td>13000</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Charlie <i class="fas fa-medal" style="color: rgb(102, 102, 102)"></i></td>
-                <td>12000</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Axel <i class="fas fa-medal" style="color: rgb(205, 127, 50)"></i></td>
-                <td>11000</td>
-            </tr>
-            <tr>
-                <th scope="row">4</th>
-                <td>Ingrid</td>
-                <td>10000</td>
-            </tr>
-            <tr>
-                <th scope="row">5</th>
-                <td>Edgar</td>
-                <td>9000</td>
-            </tr>
-            <tr>
-                <th scope="row">6</th>
-                <td>Pedro</td>
-                <td>8000</td>
-            </tr>
-            <tr>
-                <th scope="row">7</th>
-                <td>Sergio</td>
-                <td>7000</td>
-            </tr>
-            <tr>
-                <th scope="row">8</th>
-                <td>David</td>
-                <td>6000</td>
-            </tr>
-            <tr>
-                <th scope="row">9</th>
-                <td>Arturo</td>
-                <td>5000</td>
-            </tr>
-            <tr>
-                <th scope="row">10</th>
-                <td>Ernesto</td>
-                <td>4000</td>
-            </tr>
+            @{ int cont = 1; bool found = false; }
+
+            @foreach (var user in Model.Leaderboard)
+            {
+                @if(cont > 10) { break; }
+                <tr @if (user.Username == Model.Username) { found = true; }
+                    class="@(user.Username == Model.Username ? "table-active": "") ">
+                    @if (cont == 1)
+                    {
+                        <th scope="row"><i class="fas fa-medal" style="color: rgb(255, 191, 0)"></i></th>
+                    }
+                    else if (cont == 2)
+                    {
+                        <th scope="row"><i class="fas fa-medal" style="color: rgb(102, 102, 102)"></i></th>
+                    }
+                    else if (cont == 3)
+                    {
+                        <th scope="row"><i class="fas fa-medal" style="color: rgb(205, 127, 50)"></i></th>
+                    }
+                    else
+                    {
+                        <th scope="row">@cont</th>
+                    }
+                    <td>@user.Username</td>
+                    <td>@user.Score</td>
+                    @{ cont++; }
+                </tr>
+            }
+
+        </tbody>
+        @if (!found)
+        {
             <tr>
                 <td scope="row">...</td>
                 <td></td>
                 <td></td>
             </tr>
-        </tbody>
-        <tfoot>
-            <tr class="table-active">
-                <th scope="row" >13</th>
-                <td>Juan</td>
-                <td>1200</td>
-            </tr>
-        </tfoot>
+            <tfoot>
+                <tr class="table-active">
+                    <th scope="row">#</th>
+                    <td>@Model.Username</td>
+                    <td>#</td>
+                </tr>
+            </tfoot>
+        }
     </table>
 </div>
