@@ -28,7 +28,6 @@ namespace reto.Pages
             public string Username { get; set; }
             public int Score { get; set; }
         }
-        [BindProperty]
         public IList<Helper> Leaderboard { get ; set; }
 
         public string Username { get; set; }
