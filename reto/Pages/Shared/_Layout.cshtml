@@ -15,9 +15,9 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light my-font my-bg border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light my-font my-bg border-bottom box-shadow mb-3 py-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Profile"><img src="~/img/logo.png" alt="Logo Ternium" style="width: 150px;" id="logo"></a>
+                <a class="navbar-brand" asp-page="/Profile"><img src="~/img/logo.png" alt="Logo Ternium" style="width: 175px;" id="logo"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -25,19 +25,19 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item ms-5 me-5">
-                            <a class="nav-link ml-4 px-3 @(Context.Request.Path == "/Profile" ? "active-menu": "")" asp-area="" asp-page="/Profile">PERFIL</a>
+                            <a class="nav-link ml-4 px-2 btn-lg @(Context.Request.Path == "/Profile" ? "active-menu": "")" asp-page="/Profile">PERFIL</a>
                         </li>
                         <li class="nav-item me-5">
-                            <a class="nav-link ml-4 px-3 @(Context.Request.Path == "/Play" ? "active-menu": "")" asp-area="" asp-page="/Play">JUGAR</a>
+                            <a class="nav-link ml-4 px-2 btn-lg @(Context.Request.Path == "/Play" ? "active-menu": "")" asp-page="/Play">JUGAR</a>
                         </li>
                         <li class="nav-item me-5">
-                            <a class="nav-link ml-4 px-3 @(Context.Request.Path == "/Exam" ? "active-menu": "")" asp-area="" asp-page="/Exam">EXAMEN</a>
+                            <a class="nav-link ml-4 px-2 btn-lg @(Context.Request.Path == "/Exam" ? "active-menu": "")" asp-page="/Exam">EXAMEN</a>
                         </li>
                         <li class="nav-item me-5">
-                            <a class="nav-link ml-4 px-3 @(Context.Request.Path == "/Leaderboard" ? "active-menu": "")" asp-area="" asp-page="/Leaderboard">LEADERBOARD</a>
+                            <a class="nav-link ml-4 px-2 btn-lg @(Context.Request.Path == "/Leaderboard" ? "active-menu": "")" asp-page="/Leaderboard">LEADERBOARD</a>
                         </li>
                         <li class="nav-item ml-auto">
-                            <a class="nav-link" asp-area="" asp-page="/Index"><i class="fas fa-sign-out-alt"></i></a>
+                            <a class="nav-link btn-lg" asp-area="" asp-page="/Index"><i class="fas fa-sign-out-alt"></i></a>
                         </li>
                     </ul>
                 </div>

@@ -21,7 +21,7 @@ body {
 }
 
 .login-form {
-    background-image: linear-gradient(70deg, #f30, #f90);
+    background: transparent;
     border: none;
 }
 
@@ -44,5 +44,15 @@ body {
 
 #logo {
     background-color: white;
-    width: 75%;
+    width: 40%;
+}
+
+input:active, input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 131, 0, 0.5) !important;
+    outline: 0px !important;
+    border-color: transparent !important;
+}
+
+.btn:active, .btn:focus {
+    
 }

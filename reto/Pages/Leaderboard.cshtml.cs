@@ -23,20 +23,19 @@ namespace reto.Pages
             _logger = logger;
         }
 
+        public string Username { get; set; }
+
         public class Helper
         {
             public string Username { get; set; }
             public int Score { get; set; }
         }
-        public IList<Helper> Leaderboard { get ; set; }
-
-        public string Username { get; set; }
 
         public async Task OnGet()
         {
             Username = HttpContext.Session.GetString("username");
 
-            Uri baseURL = new Uri("https://chatarrap-api.herokuapp.com/attempts/scores");
+            Uri baseURL = new Uri("https://chatarrap-api.herokuapp.com/attempts/scoresWeek");
             HttpClient client = new HttpClient();
 
             client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
@@ -48,45 +47,31 @@ namespace reto.Pages
         }
 
         [BindProperty]
+        public IList<Helper> Leaderboard { get; set; }
+        [BindProperty]
         public int OptionTime { get; set; }
-        /*public async Task OnPost()
+        public async Task OnPost()
         {
-            //string url = "";
+            Username = HttpContext.Session.GetString("username");
+            string url = "";
 
             if (OptionTime == 0)
             {
-                Uri baseURL = new Uri("https://chatarrap-api.herokuapp.com/attempts/scoresWeek");
-                HttpClient client = new HttpClient();
-
-                client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
-
-                var response = await client.GetAsync(baseURL);
-                var json = await response.Content.ReadAsStringAsync();
-
-                Leaderboard = JsonConvert.DeserializeObject<List<Helper>>(json);
+                url = "https://chatarrap-api.herokuapp.com/attempts/scoresWeek";
             }
-            else if(OptionTime == 1)
+            else if (OptionTime == 1)
             {
-                Uri baseURL = new Uri("https://chatarrap-api.herokuapp.com/attempts/scores");
-                HttpClient client = new HttpClient();
-
-                client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
-
-                var response = await client.GetAsync(baseURL);
-                var json = await response.Content.ReadAsStringAsync();
-
-                Leaderboard = JsonConvert.DeserializeObject<List<Helper>>(json);
+                url = "https://chatarrap-api.herokuapp.com/attempts/scores";
             }
 
-            /*HttpClient client = new HttpClient();
             Uri baseURL = new Uri(url);
+            HttpClient client = new HttpClient();
 
             client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
 
-            var response = await client.GetAsync(baseURL);
-            var json = await response.Content.ReadAsStringAsync();
-
+            var respuesta = await client.GetAsync(baseURL);
+            var json = await respuesta.Content.ReadAsStringAsync();
             Leaderboard = JsonConvert.DeserializeObject<List<Helper>>(json);
-        }*/
+        }
     }
 }

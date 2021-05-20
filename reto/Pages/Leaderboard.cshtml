@@ -4,26 +4,26 @@
     ViewData["Title"] = "Leaderboard";
 }
 
-<div class="container mt-4">
+<div class="container mt-5">
     <div class="row">
-        <div class="col-lg-6 mb-1">
+        <div class="col-lg-6 mb-3">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-secondary active">
-                    <input type="radio" name="type" id="option1" value=0> Ex&aacute;menes
+                <label class="btn btn-secondary active btn-lg">
+                    <input type="radio" name="type" value="0"> Ex&aacute;menes
                 </label>
-                <label class="btn btn-secondary">
-                    <input type="radio" name="type" id="option2" value=1> Pr&aacute;cticas
+                <label class="btn btn-secondary btn-lg">
+                    <input type="radio" name="type" value="1"> Pr&aacute;cticas
                 </label>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 mb-3">
             <form method="post">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-secondary @(Model.OptionTime == 0 ? "active" :"")">
-                        <input type="radio" asp-for="OptionTime" value=0 name="time" id="option1"> Semanal
+                    <label class="btn btn-secondary btn-lg @(Model.OptionTime == 0 ? "active" :"")">
+                        <input onchange="this.form.submit()" type="radio" asp-for="OptionTime" value="0"> Semanal
                     </label>
-                    <label class="btn btn-secondary @(Model.OptionTime == 1 ? "active" :"")">
-                        <input type="radio" asp-for="OptionTime" value=1 name="time" id="option2"> Mensual
+                    <label class="btn btn-secondary btn-lg @(Model.OptionTime == 1 ? "active" :"")">
+                        <input onchange="this.form.submit()" type="radio" asp-for="OptionTime" value="1"> Mensual
                     </label>
                 </div>
             </form>
@@ -32,8 +32,8 @@
 
 </div>
 
-<div class="container mt-4 text-center">
-    <table class="table table-sm">
+<div class="container mt-4">
+    <table class="table text-center table-hover">
         <thead class="table-head">
             <tr>
                 <th scope="col">#</th>
