@@ -33,12 +33,12 @@
 </div>
 
 <div class="container mt-4">
-    <table class="table text-center table-hover">
+    <table class="table text-center table-hover" style="font-size: 1.25rem">
         <thead class="table-head">
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Puntos</th>
+                <th scope="col" style="width: 15%;">#</th>
+                <th scope="col" style="width: 70%;">Nombre</th>
+                <th scope="col" style="width: 15%;">Puntos</th>
             </tr>
         </thead>
         <tbody>
@@ -48,7 +48,7 @@
             {
                 @if(cont > 10) { break; }
                 <tr @if (user.Username == Model.Username) { found = true; }
-                    class="@(user.Username == Model.Username ? "table-active": "") ">
+                    class="@(user.Username == Model.Username ? "table-active": "")">
                     @if (cont == 1)
                     {
                         <th scope="row"><i class="fas fa-medal" style="color: rgb(255, 191, 0)"></i></th>
