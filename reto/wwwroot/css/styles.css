@@ -1,5 +1,10 @@
+@font-face {
+    font-family: "Ternium Font";
+    src: url(../font/TradeGothicLTStd-BdCn20.otf) format("truetype");
+}
+
 * {
-    font-family: 'Trade Gothic LT W01 Roman';
+    font-family: 'Ternium Font';
 }
 
 .border-bottom {

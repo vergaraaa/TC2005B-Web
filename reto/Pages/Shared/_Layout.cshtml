@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <!-- MY STYLES -->
     <link rel="stylesheet" href="~/css/styles.css" />
+
+
 </head>
 <body>
     <header>
@@ -25,16 +27,16 @@
                 <div class="navbar-collapse collapse d-lg-inline-flex flex-lg-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link ml-4 px-2 btn-lg @(Context.Request.Path == "/Profile" ? "active-menu": "")" asp-page="/Profile">PERFIL</a>
+                            <a class="nav-link ml-4 px-4 btn-lg @(Context.Request.Path == "/Profile" ? "active-menu": "")" asp-page="/Profile">PERFIL</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link ml-4 px-2 btn-lg @(Context.Request.Path == "/Play" ? "active-menu": "")" asp-page="/Play">JUGAR</a>
+                            <a class="nav-link ml-4 px-4 btn-lg @(Context.Request.Path == "/Play" ? "active-menu": "")" asp-page="/Play">JUGAR</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link ml-4 px-2 btn-lg @(Context.Request.Path == "/Exam" ? "active-menu": "")" asp-page="/Exam">EXAMEN</a>
+                            <a class="nav-link ml-4 px-4 btn-lg @(Context.Request.Path == "/Exam" ? "active-menu": "")" asp-page="/Exam">EXAMEN</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link ml-4 px-2 btn-lg @(Context.Request.Path == "/Leaderboard" ? "active-menu": "")" asp-page="/Leaderboard">LEADERBOARD</a>
+                            <a class="nav-link ml-4 px-4 btn-lg @(Context.Request.Path == "/Leaderboard" ? "active-menu": "")" asp-page="/Leaderboard">LEADERBOARD</a>
                         </li>
                         <li class="nav-item ml-auto">
                             <a class="nav-link btn-lg" asp-page="/Index"><i class="fas fa-sign-out-alt"></i></a>

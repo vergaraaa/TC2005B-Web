@@ -1,5 +1,10 @@
+@font-face {
+    font-family: "Ternium Font";
+    src: url(../font/TradeGothicLTStd-BdCn20.otf) format("truetype");
+}
+
 * {
-    font-family: 'Trade Gothic LT W01 Roman';
+    font-family: 'Ternium Font'; 
     margin: 0;
     padding: 0;
 }
@@ -21,8 +26,9 @@ body {
 }
 
 .login-form {
-    background: transparent;
     border: none;
+    background: rgba(255,103,0,0.75);
+    border-radius: 10px;
 }
 
 .title {
@@ -31,7 +37,7 @@ body {
 }
 
 .mybtn {
-    color: rgb(255, 131, 0);
+    color: black;
     background-color: white;
     border-radius: 50px;
     transition: all 0.3s ease;
