@@ -39,17 +39,15 @@
                 <div class="card-body">
                     <form method="post">
                         <div class="col-lg-8 mt-3 mb-5 mx-auto">
-                            <div class="input-group input-group-lg">
-                                <input type="text" placeholder="USUARIO" class="form-control" asp-for="User.Username" aria-describedby="inputGroup-sizing-lg">
-                            </div>
+                            <label for="username" class="h3">Usuario</label>
+                            <input type="text" name="username" class="form-control form-control-lg" asp-for="User.Username" aria-describedby="inputGroup-sizing-lg">
                         </div>
                         <div class="col-lg-8 mb-5 mx-auto">
-                            <div class="input-group input-group-lg">
-                                <input type="password" placeholder="CONTRASEÑA" class="form-control" asp-for="User.Password" aria-describedby="inputGroup-sizing-lg">
-                            </div>
+                            <label for="password" class="h3">Contraseña</label>
+                            <input type="password" name="password" class="form-control form-control-lg" asp-for="User.Password" aria-describedby="inputGroup-sizing-lg">
                         </div>
                         <div class="col-lg mb-3 text-center">
-                            <input type="submit" class="btn mybtn btn-lg px-5" value="INICIAR SESIÓN" />
+                            <input type="submit" class="btn mybtn btn-lg px-5" value="Iniciar sesión" />
                         </div>
                     </form>
                 </div>
