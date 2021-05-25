@@ -1,5 +1,15 @@
-﻿* {
-    font-family: 'Trade Gothic LT W01 Roman';
+﻿@font-face {
+    font-family: "Ternium Font";
+    src: url(../font/TradeGothicLTStd-BdCn20.otf) format('opentype');
+}
+
+@font-face {
+    font-family: "Ternium Font Light";
+    src: url(../font/TradeGothicLTStd.otf) format('opentype');
+}
+
+* {
+    font-family: 'Ternium Font';
 }
 
 .border-bottom {
@@ -74,4 +84,9 @@ a.nav-link {
 
 .custom-select:active, .custom-select:focus {
     box-shadow: 0 0 0 0.2rem rgba(102, 102, 102, 0.5) !important;
+}
+
+.lighter-font {
+    font-family:"Ternium Font Light" !important;
+    font-size:smaller;
 }

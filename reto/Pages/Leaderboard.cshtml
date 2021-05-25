@@ -63,10 +63,10 @@
                     }
                     else
                     {
-                        <th scope="row">@cont</th>
+                        <th scope="row" class="lighter-font">@cont</th>
                     }
-                    <td>@user.Username</td>
-                    <td>@user.Score</td>
+                    <td class="lighter-font">@user.Username</td>
+                    <td class="lighter-font">@user.Score</td>
                     @{ cont++; }
                 </tr>
             }
@@ -75,15 +75,15 @@
         @if (!found)
         {
             <tr>
-                <td scope="row">...</td>
+                <td scope="row" class="lighter-font">...</td>
                 <td></td>
                 <td></td>
             </tr>
             <tfoot>
                 <tr class="table-active">
-                    <th scope="row">#</th>
-                    <td>@Model.Username</td>
-                    <td>#</td>
+                    <th scope="row" class="lighter-font">#</th>
+                    <td class="lighter-font">@Model.Username</td>
+                    <td class="lighter-font">#</td>
                 </tr>
             </tfoot>
         }
