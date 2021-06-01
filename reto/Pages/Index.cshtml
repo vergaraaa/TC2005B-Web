@@ -40,11 +40,11 @@
                     <form method="post">
                         <div class="col-lg-8 mt-3 mb-5 mx-auto">
                             <label for="username" class="h3">Usuario</label>
-                            <input type="text" name="username" class="form-control form-control-lg" asp-for="User.Username" aria-describedby="inputGroup-sizing-lg">
+                            <input type="text" name="username" class="form-control form-control-lg" asp-for="User.Username" required>
                         </div>
                         <div class="col-lg-8 mb-5 mx-auto">
                             <label for="password" class="h3">Contraseña</label>
-                            <input type="password" name="password" class="form-control form-control-lg" asp-for="User.Password" aria-describedby="inputGroup-sizing-lg">
+                            <input type="password" name="password" class="form-control form-control-lg" asp-for="User.Password" required>
                         </div>
                         <div class="col-lg mb-3 text-center">
                             <input type="submit" class="btn mybtn btn-lg px-5" value="Iniciar sesión" />

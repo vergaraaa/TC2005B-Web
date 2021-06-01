@@ -10,6 +10,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using MySql.Data.MySqlClient;
 
 namespace reto.Pages
 {
@@ -49,29 +50,69 @@ namespace reto.Pages
         [BindProperty]
         public IList<Helper> Leaderboard { get; set; }
         [BindProperty]
+        public int OptionType { get; set; }
+        [BindProperty]
         public int OptionTime { get; set; }
         public async Task OnPost()
         {
             Username = HttpContext.Session.GetString("username");
-            string url = "";
+            if (OptionType == 0)
+            { 
+                string url = "";
 
-            if (OptionTime == 0)
-            {
-                url = "https://chatarrap-api.herokuapp.com/attempts/scoresWeek";
+                if (OptionTime == 0)
+                {
+                    url = "https://chatarrap-api.herokuapp.com/attempts/scoresWeek";
+                }
+                else if (OptionTime == 1)
+                {
+                    url = "https://chatarrap-api.herokuapp.com/attempts/scores";
+                }
+
+                Uri baseURL = new Uri(url);
+                HttpClient client = new HttpClient();
+
+                client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
+
+                var respuesta = await client.GetAsync(baseURL);
+                var json = await respuesta.Content.ReadAsStringAsync();
+                Leaderboard = JsonConvert.DeserializeObject<List<Helper>>(json);
+            
             }
-            else if (OptionTime == 1)
+            else if (OptionType == 1)
             {
-                url = "https://chatarrap-api.herokuapp.com/attempts/scores";
+                OptionType = 1;
+                string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
+
+                MySqlConnection conexion = new MySqlConnection(connectionString);
+                conexion.Open();
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conexion;
+
+                if (OptionTime == 0)
+                {
+                    cmd.CommandText = @"select username, sum(score) as score from user inner join exercise on user.id_user = exercise.id_user where YEARWEEK(NOW()) = YEARWEEK(exercise.timestamp) group by (user.id_user) order by sum(exercise.score) desc, username desc";
+                }
+                else if (OptionTime == 1)
+                {
+                    cmd.CommandText = @"select username, sum(score) as score from user inner join exercise on user.id_user = exercise.id_user where MONTH(NOW()) = MONTH(exercise.timestamp) AND YEAR(NOW()) = YEAR(exercise.timestamp) group by(user.id_user) order by sum(exercise.score) desc, user.username desc;";
+                }
+                Helper usr;
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        usr = new Helper
+                        {
+                            Username = reader["username"].ToString(),
+                            Score = Convert.ToInt32(reader["score"])
+                        };
+                        Leaderboard.Add(usr);
+                    }
+                }
+                conexion.Dispose();
             }
-
-            Uri baseURL = new Uri(url);
-            HttpClient client = new HttpClient();
-
-            client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
-
-            var respuesta = await client.GetAsync(baseURL);
-            var json = await respuesta.Content.ReadAsStringAsync();
-            Leaderboard = JsonConvert.DeserializeObject<List<Helper>>(json);
         }
     }
 }
