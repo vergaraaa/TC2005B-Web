@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.FileProviders;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace reto
 {
@@ -46,9 +49,12 @@ namespace reto
                 app.UseHsts();
             }
 
+            var options = new StaticFileOptions();
+            var contentTypeProvider = (FileExtensionContentTypeProvider)options.ContentTypeProvider ?? new FileExtensionContentTypeProvider();
+            contentTypeProvider.Mappings.Add(".data", "application/octet-stream");
+            options.ContentTypeProvider = contentTypeProvider;
+            app.UseStaticFiles(options);
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
             app.UseRouting();
 
             app.UseAuthorization();
