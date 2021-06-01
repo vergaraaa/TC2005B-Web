@@ -5,19 +5,20 @@
 }
 
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-lg-6 mb-3">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-secondary active btn-lg">
-                    <input type="radio" name="type" value="0"> Ex&aacute;menes
-                </label>
-                <label class="btn btn-secondary btn-lg">
-                    <input type="radio" name="type" value="1"> Pr&aacute;cticas
-                </label>
+    
+    <form method="post">
+        <div class="row">
+            <div class="col-lg-6 mb-3">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary btn-lg @(Model.OptionType == 0 ? "active" :"")">
+                        <input onchange="this.form.submit()" type="radio" asp-for="OptionType" value="0"> Ex&aacute;menes
+                    </label>
+                    <label class="btn btn-secondary btn-lg @(Model.OptionType == 1 ? "active" :"")">
+                        <input onchange="this.form.submit()" type="radio" asp-for="OptionType" value="1"> Pr&aacute;cticas
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="col-lg-6 mb-3">
-            <form method="post">
+            <div class="col-lg-6 mb-3">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary btn-lg @(Model.OptionTime == 0 ? "active" :"")">
                         <input onchange="this.form.submit()" type="radio" asp-for="OptionTime" value="0"> Semanal
@@ -26,9 +27,9 @@
                         <input onchange="this.form.submit()" type="radio" asp-for="OptionTime" value="1"> Mensual
                     </label>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 
 </div>
 
@@ -46,7 +47,7 @@
 
             @foreach (var user in Model.Leaderboard)
             {
-                @if(cont > 10) { break; }
+                @if (cont > 10) { break; }
                 <tr @if (user.Username == Model.Username) { found = true; }
                     class="@(user.Username == Model.Username ? "table-active": "")">
                     @if (cont == 1)
