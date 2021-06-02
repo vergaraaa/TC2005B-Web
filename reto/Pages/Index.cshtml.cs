@@ -123,9 +123,16 @@ namespace reto.Pages
                     var parsedObj = JObject.Parse(responseContent);
                     HttpContext.Session.SetString("id", parsedObj["user"].ToString());
                     HttpContext.Session.SetString("username", User.Username);
-                    HttpContext.Session.SetString("departments", @"['Chatarreria', 'Test']");
                     HttpContext.Session.SetString("token", parsedObj["token"].ToString());
 
+                    // Set departments in session variable
+                    client.DefaultRequestHeaders.Add("auth_key", parsedObj["token"].ToString());
+
+                    response = await client.GetAsync("https://chatarrap-api.herokuapp.com/users/" + parsedObj["user"].ToString());
+                    var json = await response.Content.ReadAsStringAsync();
+                    string departments = JObject.Parse(json)["usertype"].ToString();
+                    HttpContext.Session.SetString("departments", departments);
+                    
                     return RedirectToPage("/Profile");
                 }
                 else
