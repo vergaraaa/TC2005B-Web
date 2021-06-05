@@ -5,74 +5,77 @@
 }
 
 <style>
-    div#gameContainer {
-        background: transparent !important;
+    canvas {
+        padding: 0 0 0 0;
+        margin: 0 auto 0 auto !important;
     }
 
-        div#gameContainer canvas {
-        }
-
-            div#gameContainer canvas[data-pixel-art="true"] {
-                image-rendering: optimizeSpeed;
-                image-rendering: -moz-crisp-edges;
-                image-rendering: pixelated;
-                -ms-interpolation-mode: nearest-neighbor;
-            }
+    div#gameContainer canvas[data-pixel-art="true"] {
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: pixelated;
+        -ms-interpolation-mode: nearest-neighbor;
+    }
 </style>
 
-<div id="gameContainer" class="container">
-	<canvas id="unity-canvas" data-pixel-art=""></canvas>
-	<script src="~/Build/Builds.loader.js"></script>
-	<script>
-			createUnityInstance(document.querySelector("#unity-canvas"), {
-				dataUrl: "Build/Builds.data",
-				frameworkUrl: "Build/Builds.framework.js",
-				codeUrl: "Build/Builds.wasm",
-				streamingAssetsUrl: "StreamingAssets",
-				companyName: "DefaultCompany",
-				productName: "Proyecto Final",
-				productVersion: "1.0",
-			}).then(function (instance) {
-				var canvas = instance.Module.canvas;
-				var container = canvas.parentElement;
-				function onResize() {
-					var w;
-					var h;
 
-					if (scaleToFit) {
-						// MODIFICAR AQUÍ RESPONSIVIDAD
-						// Hacer que dependa del tamaño del div responsivo, no de la ventana
-						w = window.innerWidth;
-						h = window.innerHeight;
+<div id="gameContainer" style="background-color:black !important; position:absolute; display:flex;">
+    <canvas id="unity-canvas" data-pixel-art="true"></canvas>
+    <script src="~/Build/Build_Semana9.loader.js"></script>
+    <script>
+        createUnityInstance(document.querySelector("#unity-canvas"), {
+            dataUrl: "Build/Build_Semana9.data",
+            frameworkUrl: "Build/Build_Semana9.framework.js",
+            codeUrl: "Build/Build_Semana9.wasm",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "DefaultCompany",
+            productName: "Proyecto Final",
+            productVersion: "1.0",
+        }).then(function (instance) {
+            // INICIA CÓDIGO PARA LA RESPONSIVIDAD
+            var canvas = instance.Module.canvas;
+            var my_container = canvas.parentElement;
+            function onResize() {
+                // Ajuste del contenedor padre
+                var top_h = document.getElementsByTagName("nav")[0].clientHeight;
+                var w = document.documentElement.clientWidth;
+                var h = document.documentElement.clientHeight;
 
-						console.log("Ancho detectado: " + w.toString());
-                        console.log("Altura detectada: " + h.toString());
+                my_container.style.width = w + "px";
+                my_container.style.height = (h - top_h) + "px";
+                my_container.style.top = top_h + "px";
+                my_container.style.left = 0 + "px";
 
-						var r = 540 / 960;
+                console.log(w);
+                console.log(h);
 
-						if (w * r > h) {
-							w = Math.min(w, Math.ceil(h / r));
-						}
-						h = Math.floor(w * r);
-					} else {
-						w = 960;
-						h = 540;
-					}
+                // Ajuste del Canvas de Unity
+                var scale_ratio = 960 / 540;
+                if (h - top_h > w / scale_ratio) {
+                    console.log("Caso A");
+                    canvas.style.width = w + "px";
+                    canvas.style.height = Math.round(w / scale_ratio) + "px";
+                }
+                else {
+                    console.log("Caso B");
+                    canvas.style.height = h - top_h + "px";
+                    canvas.style.width = Math.round((h - top_h) * scale_ratio) + "px";
+                }
 
-					container.style.width = canvas.style.width = w + "px";
-					container.style.height = canvas.style.height = h + "px";
-					container.style.top = Math.floor((window.innerHeight - h) / 2) + "px";
-					container.style.left = Math.floor((window.innerWidth - w) / 2) + "px";
-				}
+                console.log(canvas.style.width);
+                console.log(canvas.style.height);
 
-				var scaleToFit;
-				try {
-					scaleToFit = !!JSON.parse("");
-				} catch (e) {
-					scaleToFit = true;
-				}
-				window.addEventListener('resize', onResize);
-				onResize();
-			});
-	</script>
+                // TERMINA CÓDIGO PERSONALIZADO PARA RESPONSIVIDAD
+            }
+
+            var scaleToFit;
+            try {
+                scaleToFit = !!JSON.parse("true");
+            } catch (e) {
+                scaleToFit = true;
+            }
+            window.addEventListener('resize', onResize);
+            onResize();
+        });
+    </script>
 </div>
