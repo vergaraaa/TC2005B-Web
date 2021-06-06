@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
@@ -74,15 +73,15 @@ namespace reto.Pages
 
                 client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
 
-                var respuesta = await client.GetAsync(baseURL);
-                var json = await respuesta.Content.ReadAsStringAsync();
+                var response = await client.GetAsync(baseURL);
+                var json = await response.Content.ReadAsStringAsync();
                 Leaderboard = JsonConvert.DeserializeObject<List<Helper>>(json);
             
             }
             else if (OptionType == 1)
             {
                 OptionType = 1;
-                string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
+                string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
 
                 MySqlConnection conexion = new MySqlConnection(connectionString);
                 conexion.Open();
@@ -92,11 +91,11 @@ namespace reto.Pages
 
                 if (OptionTime == 0)
                 {
-                    cmd.CommandText = @"select username, sum(score) as score from user inner join exercise on user.id_user = exercise.id_user where YEARWEEK(NOW()) = YEARWEEK(exercise.timestamp) group by (user.id_user) order by sum(exercise.score) desc, username desc";
+                    cmd.CommandText = @"SELECT username, SUM(score) AS score FROM user INNER JOIN exercise ON user.id_user = exercise.id_user WHERE YEARWEEK(NOW()) = YEARWEEK(exercise.timestamp) GROUP BY (user.id_user) ORDER BY SUM(exercise.score) DESC, username DESC";
                 }
                 else if (OptionTime == 1)
                 {
-                    cmd.CommandText = @"select username, sum(score) as score from user inner join exercise on user.id_user = exercise.id_user where MONTH(NOW()) = MONTH(exercise.timestamp) AND YEAR(NOW()) = YEAR(exercise.timestamp) group by(user.id_user) order by sum(exercise.score) desc, user.username desc;";
+                    cmd.CommandText = @"SELECT username, SUM(score) AS score FROM user INNER JOIN exercise ON user.id_user = exercise.id_user WHERE MONTH(NOW()) = MONTH(exercise.timestamp) AND YEAR(NOW()) = YEAR(exercise.timestamp) GROUP BY (user.id_user) ORDER BY SUM(exercise.score) DESC, user.username DESC";
                 }
                 Helper usr;
                 using (var reader = cmd.ExecuteReader())
