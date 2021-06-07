@@ -64,7 +64,7 @@ namespace reto.Pages
                     string query;
 
                     // Connect to the database using our local credentials
-                    string db_string = @"server=127.0.0.1;uid=root;password=Al.730550;database=db_ternium";
+                    string db_string = @"server=127.0.0.1;uid=root;password=Tijuana13!;database=db_ternium";
                     MySqlConnection conexion = new MySqlConnection(db_string);
                     conexion.Open();
 
@@ -76,7 +76,7 @@ namespace reto.Pages
 
                     // Read returns false when no values were obtained from the query above
                     if (!reader.Read())
-                    {
+                    { 
                         // Closes the previous connection read to allow further queries
                         conexion.Close();
 
@@ -124,6 +124,7 @@ namespace reto.Pages
                     HttpContext.Session.SetString("id", parsedObj["user"].ToString());
                     HttpContext.Session.SetString("username", User.Username);
                     HttpContext.Session.SetString("token", parsedObj["token"].ToString());
+                    HttpContext.Session.SetInt32("local_id", id_user);
 
                     // Set departments in session variable
                     client.DefaultRequestHeaders.Add("auth_key", parsedObj["token"].ToString());

@@ -35,13 +35,95 @@ namespace reto.Pages
             public int Score { get; set; }
         }
 
-        async public void OnGet()
+        public int Medal1 { get; set; }
+        public int Medal2 { get; set; }
+        public int Medal3 { get; set; }
+
+        public int ScoreMedal1 { get; set; }
+        public int ScoreMedal2 { get; set; }
+        public int ScoreMedal3 { get; set; }
+
+        public class Attempts
+        {
+            public string Id { get; set; }
+            public string Username { get; set; }
+            public string ExamName { get; set; }
+            public string ExamID { get; set; }
+            public int Score { get; set; }
+            public int Attempt { get; set; }
+            public DateTime Date { get; set; }
+            public DateTime CreatedAt { get; set; }
+            public DateTime UpdatedAt { get; set; }
+            public int V { get; set; }
+        }
+
+        [BindProperty]
+        public IList<Attempts> ListAttempts { get; set; }
+
+        public async Task OnGet()
         {
             Username = HttpContext.Session.GetString("username");
             Departments = JsonConvert.DeserializeObject<List<string>>(HttpContext.Session.GetString("departments"));
             await ActualizaTopDiez();
-            // Con el top diez muestra indicador donde lo considere adecuado el Product Owner
-            // El indicador lo calcula fecha actual - fecha de entrada. 1 día, 30 días, 183 días, 365 días
+
+            // Medalla 3
+            // Calcular indicador top 10 con base a la diferencia del campo entry_date y last_check
+
+
+            string url = "https://chatarrap-api.herokuapp.com/attempts/";
+            Uri baseURL = new Uri(url);
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
+            var response = await client.GetAsync(baseURL);
+            var json = await response.Content.ReadAsStringAsync();
+
+            ListAttempts = JsonConvert.DeserializeObject<List<Attempts>>(json);
+
+            // Medalla 1 y medalla 2
+            foreach (var attempt in ListAttempts)
+            {
+                if (attempt.Username == Username)
+                {
+                    ScoreMedal1++;
+                    if (attempt.Score == 100 && attempt.Attempt == 1)
+                    {
+                        ScoreMedal2++;
+                    }
+                }
+            }
+
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
+            MySqlConnection conexion = new MySqlConnection(connectionString);
+            conexion.Open();
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conexion;
+
+            cmd.CommandText = @"SELECT id_user, id_medal, user_medal.rank FROM user_medal WHERE id_user = @id_user";
+            cmd.Parameters.AddWithValue("@id_user", HttpContext.Session.GetInt32("local_id"));
+
+            // ver si cumple para medalla 1 y medalla 2 y si sí hacer un insert y si no pues nada
+            // si sí está ver si el rank actual es mayor que el rank guardado en la base de datos
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    if ((int)reader["id_medal"] == 1)
+                    {
+                        Medal1 = (int)reader["rank"];
+                    }
+                    else if ((int)reader["id_medal"] == 2)
+                    {
+                        Medal2 = (int)reader["rank"];
+                    }
+                    else if ((int)reader["id_medal"] == 3)
+                    {
+                        Medal3 = (int)reader["rank"];
+                    }
+                }
+            }
+
+            conexion.Dispose();
         }
 
         public async Task ActualizaTopDiez()
