@@ -40,12 +40,14 @@ namespace reto.Pages
             Username = HttpContext.Session.GetString("username");
             Departments = JsonConvert.DeserializeObject<List<string>>(HttpContext.Session.GetString("departments"));
             await ActualizaTopDiez();
+            // Con el top diez muestra indicador donde lo considere adecuado el Product Owner
+            // El indicador lo calcula fecha actual - fecha de entrada. 1 día, 30 días, 183 días, 365 días
         }
 
         public async Task ActualizaTopDiez()
         {
-            string url = "https://chatarrap-api.herokuapp.com/attempts/scoresWeek";
-            // string url = "https://chatarrap-api.herokuapp.com/attempts/scores";
+            // string url = "https://chatarrap-api.herokuapp.com/attempts/scoresWeek";
+            string url = "https://chatarrap-api.herokuapp.com/attempts/scores";
 
             Uri baseURL = new Uri(url);
             HttpClient client = new HttpClient();

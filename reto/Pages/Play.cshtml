@@ -10,6 +10,13 @@
         margin: 0 auto 0 auto !important;
     }
 
+    div#gameContainer {
+        background-color:black !important;
+        position:absolute;
+        display:flex;
+        z-index:-1;
+    }
+
     div#gameContainer canvas[data-pixel-art="true"] {
         image-rendering: optimizeSpeed;
         image-rendering: -moz-crisp-edges;
@@ -19,7 +26,7 @@
 </style>
 
 
-<div id="gameContainer" style="background-color:black !important; position:absolute; display:flex;">
+<div id="gameContainer">
     <canvas id="unity-canvas" data-pixel-art="true"></canvas>
     <script src="~/Build/Build_Semana9.loader.js"></script>
     <script>
