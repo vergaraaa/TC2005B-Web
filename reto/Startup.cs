@@ -32,6 +32,8 @@ namespace reto
                 options.Cookie.HttpOnly = true; 
                 options.Cookie.IsEssential = true; 
             });
+
+
             services.AddRazorPages();
         }
 

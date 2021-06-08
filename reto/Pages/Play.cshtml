@@ -1,8 +1,6 @@
 @page
 @model PlayModel
-@{
-    ViewData["Title"] = "Jugar";
-}
+@{ ViewData["Title"] = "Jugar"; }
 
 <style>
     canvas {
@@ -11,18 +9,18 @@
     }
 
     div#gameContainer {
-        background-color:black !important;
-        position:absolute;
-        display:flex;
-        z-index:-1;
+        background-color: black !important;
+        position: absolute;
+        display: flex;
+        z-index: -1;
     }
 
-    div#gameContainer canvas[data-pixel-art="true"] {
-        image-rendering: optimizeSpeed;
-        image-rendering: -moz-crisp-edges;
-        image-rendering: pixelated;
-        -ms-interpolation-mode: nearest-neighbor;
-    }
+        div#gameContainer canvas[data-pixel-art="true"] {
+            image-rendering: optimizeSpeed;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: pixelated;
+            -ms-interpolation-mode: nearest-neighbor;
+        }
 </style>
 
 

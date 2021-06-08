@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using MySql.Data.MySqlClient;
 using System.Data;
+using reto.Models;
 
 namespace reto.Pages
 {
@@ -29,46 +30,25 @@ namespace reto.Pages
         public IList<string> Departments { get; set; }
         public string Token { get; set; }
         public string Id { get; set; }
-        public class Helper
-        {
-            public string Username { get; set; }
-            public int Score { get; set; }
-        }
 
-        public int Medal1 { get; set; }
-        public int Medal2 { get; set; }
-        public int Medal3 { get; set; }
+        public int[] Medals { get; set; } = new int[3];
 
-        public int ScoreMedal1 { get; set; }
-        public int ScoreMedal2 { get; set; }
-        public int ScoreMedal3 { get; set; }
-
-        public class Attempts
-        {
-            public string Id { get; set; }
-            public string Username { get; set; }
-            public string ExamName { get; set; }
-            public string ExamID { get; set; }
-            public int Score { get; set; }
-            public int Attempt { get; set; }
-            public DateTime Date { get; set; }
-            public DateTime CreatedAt { get; set; }
-            public DateTime UpdatedAt { get; set; }
-            public int V { get; set; }
-        }
+        public int[] ScoreMedals { get; set; } = new int[3];
 
         [BindProperty]
         public IList<Attempts> ListAttempts { get; set; }
 
         public async Task OnGet()
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                RedirectToPage();
+            }
+
             Username = HttpContext.Session.GetString("username");
             Departments = JsonConvert.DeserializeObject<List<string>>(HttpContext.Session.GetString("departments"));
             await ActualizaTopDiez();
-
-            // Medalla 3
-            // Calcular indicador top 10 con base a la diferencia del campo entry_date y last_check
-
+            int daysInTop10 = 2;
 
             string url = "https://chatarrap-api.herokuapp.com/attempts/";
             Uri baseURL = new Uri(url);
@@ -79,20 +59,37 @@ namespace reto.Pages
 
             ListAttempts = JsonConvert.DeserializeObject<List<Attempts>>(json);
 
-            // Medalla 1 y medalla 2
+            // Score actual de Medalla 1 y medalla 2
             foreach (var attempt in ListAttempts)
             {
-                if (attempt.Username == Username)
+                if (attempt.Username == "alberto")
                 {
-                    ScoreMedal1++;
+                    ScoreMedals[0]++;
                     if (attempt.Score == 100 && attempt.Attempt == 1)
                     {
-                        ScoreMedal2++;
+                        ScoreMedals[1]++;
                     }
                 }
             }
 
-            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
+            // Gets current rank of medal 1
+            int rank_medal1 = 0;
+            if (ScoreMedals[0] >= 1 && ScoreMedals[0] < 5) rank_medal1 = 1;
+            else if (ScoreMedals[0] >= 5 && ScoreMedals[0] < 10) rank_medal1 = 2;
+            else if (ScoreMedals[0] >= 10 && ScoreMedals[0] < 50) rank_medal1 = 3;
+            else if (ScoreMedals[0] >= 50 && ScoreMedals[0] < 100) rank_medal1 = 4;
+
+            // Gets current rank of medal 2
+            int rank_medal2 = 0;
+            if (ScoreMedals[1] == 1) rank_medal2 = 1;
+            else if (ScoreMedals[1] > 1 && ScoreMedals[1] < 10) rank_medal2 = 2;
+            else if (ScoreMedals[1] >= 10 && ScoreMedals[1] < 50) rank_medal2 = 3;
+            else if (ScoreMedals[1] >= 50 && ScoreMedals[1] < 100) rank_medal2 = 4;
+
+            // Get current rank of medal 3
+            //
+
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
             MySqlConnection conexion = new MySqlConnection(connectionString);
             conexion.Open();
             MySqlCommand cmd = new MySqlCommand();
@@ -101,25 +98,103 @@ namespace reto.Pages
             cmd.CommandText = @"SELECT id_user, id_medal, user_medal.rank FROM user_medal WHERE id_user = @id_user";
             cmd.Parameters.AddWithValue("@id_user", HttpContext.Session.GetInt32("local_id"));
 
-            // ver si cumple para medalla 1 y medalla 2 y si sí hacer un insert y si no pues nada
-            // si sí está ver si el rank actual es mayor que el rank guardado en la base de datos
-
-            using (var reader = cmd.ExecuteReader())
+            List<Medal> ListMedals = new List<Medal>();
+            Medal temp;
+            
+            using(var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    if ((int)reader["id_medal"] == 1)
+                    temp = new Medal
                     {
-                        Medal1 = (int)reader["rank"];
-                    }
-                    else if ((int)reader["id_medal"] == 2)
+                        Id_user = (int)reader["id_user"],
+                        Id_medal = (int)reader["id_medal"],
+                        Rank = (int)reader["rank"]
+                    };
+                    ListMedals.Add(temp);
+                }
+            }
+
+            conexion.Close();
+
+            if(ListMedals.Count > 0)
+            {
+                foreach(var medal in ListMedals)
+                {
+                    if(medal.Id_medal == 1)
                     {
-                        Medal2 = (int)reader["rank"];
+                        if (rank_medal1 > medal.Rank)
+                        {
+                            conexion.Open();
+                            var query = @"UPDATE user_medal SET user_medal.rank=@rank WHERE id_user=@id_user AND id_medal=@id_medal";
+                            MySqlCommand update = new MySqlCommand(query, conexion);
+                            update.Parameters.AddWithValue("@rank", rank_medal1);
+                            update.Parameters.AddWithValue("@id_user", HttpContext.Session.GetInt32("local_id"));
+                            update.Parameters.AddWithValue("@id_medal", 1);
+                            update.ExecuteNonQuery();
+                            conexion.Close();
+
+                            Medals[0] = rank_medal1;
+                        }
+                        else
+                        {
+                            Medals[0] = medal.Rank;
+                        }
                     }
-                    else if ((int)reader["id_medal"] == 3)
+                    else if (medal.Id_medal == 2)
                     {
-                        Medal3 = (int)reader["rank"];
+                        if (rank_medal2 > medal.Rank)
+                        {
+                            conexion.Open();
+                            var query = @"UPDATE user_medal SET user_medal.rank=@rank WHERE id_user=@id_user AND id_medal=@id_medal";
+                            MySqlCommand update = new MySqlCommand(query, conexion);
+                            update.Parameters.AddWithValue("@rank", rank_medal2);
+                            update.Parameters.AddWithValue("@id_user", HttpContext.Session.GetInt32("local_id"));
+                            update.Parameters.AddWithValue("@id_medal", 2);
+                            update.ExecuteNonQuery();
+                            conexion.Close();
+
+                            Medals[1] = rank_medal2;
+                        }
+                        else
+                        {
+                           Medals[1] = medal.Rank;
+                        }
                     }
+                    else if (medal.Id_medal == 3)
+                    {
+
+                    }
+                }
+            }
+            else
+            {
+                if(rank_medal1 > 0)
+                {
+                    conexion.Open();
+                    var query = "INSERT INTO user_medal(id_user, id_medal, user_medal.rank) VALUES(@id_user, @id_medal, @rank)";
+                    cmd = new MySqlCommand(query, conexion);
+                    cmd.Parameters.AddWithValue("@id_user", HttpContext.Session.GetInt32("local_id"));
+                    cmd.Parameters.AddWithValue("@id_medal", 1);
+                    cmd.Parameters.AddWithValue("@rank", rank_medal1);
+                    cmd.ExecuteNonQuery();
+                    conexion.Close();
+
+                    Medals[0] = rank_medal1;
+                }
+
+                if (rank_medal2 > 0)
+                {
+                    conexion.Open();
+                    var query = "INSERT INTO user_medal(id_user, id_medal, user_medal.rank) VALUES(@id_user, @id_medal, @rank)";
+                    cmd = new MySqlCommand(query, conexion);
+                    cmd.Parameters.AddWithValue("@id_user", HttpContext.Session.GetInt32("local_id"));
+                    cmd.Parameters.AddWithValue("@id_medal", 2);
+                    cmd.Parameters.AddWithValue("@rank", rank_medal2);
+                    cmd.ExecuteNonQuery();
+                    conexion.Close();
+
+                    Medals[1] = rank_medal1;
                 }
             }
 
@@ -137,21 +212,21 @@ namespace reto.Pages
             client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
             var respuesta = await client.GetAsync(baseURL);
             var json = await respuesta.Content.ReadAsStringAsync();
-            
+
             // Obtiene los primeros 10 lugares al momento del leaderboard, o menos si hay menos
             var scores = JsonConvert.DeserializeObject<List<Helper>>(json);
             int n = Math.Min(scores.Count, 10);
             var top10 = scores.Take(n);
 
             // Abre la conexión a la base de datos del sistema 
-            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
             MySqlConnection conexion = new MySqlConnection(connectionString);
             conexion.Open();
             MySqlCommand cmd = new MySqlCommand();
             cmd.Connection = conexion;
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "CheckTopTen";
-            cmd.Parameters.AddWithValue("@Username", "'temp'");
+            cmd.Parameters.AddWithValue("@Username", "temp");
 
             // Itera el top 10 actual, llamando un stored procedure para cada uno
             foreach (var user in top10)
