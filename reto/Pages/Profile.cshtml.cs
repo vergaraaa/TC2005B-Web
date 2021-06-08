@@ -92,7 +92,7 @@ namespace reto.Pages
                 }
             }
 
-            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
             MySqlConnection conexion = new MySqlConnection(connectionString);
             conexion.Open();
             MySqlCommand cmd = new MySqlCommand();
