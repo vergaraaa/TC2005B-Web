@@ -40,30 +40,12 @@ namespace reto.Pages
 
         public async Task OnGet()
         {
-            if (HttpContext.Session.GetString("username") == null)
-            {
-                RedirectToPage();
-            }
 
             Username = HttpContext.Session.GetString("username");
             Departments = JsonConvert.DeserializeObject<List<string>>(HttpContext.Session.GetString("departments"));
             await ActualizaTopDiez();
 
-            // Abre la conexión a la base de datos del sistema 
-            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
-            MySqlConnection conexion = new MySqlConnection(connectionString);
-
-            // Ejecuta un stored procedure para obtener el dato de la medalla mantenerse en el top 10
-            conexion.Open();
-            MySqlCommand cmd = new MySqlCommand();
-            cmd.Connection = conexion;
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "DaysInTopTen";
-            cmd.Parameters.AddWithValue("@Username", Username);
-            var reader1 = cmd.ExecuteReader();
-            reader1.Read();
-            int daysInTop10 = (int)reader1["Days"];
-            conexion.Close();
+            
 
             // Realiza la conexión al API de Ternium para calcular las medallas
             string url = "https://chatarrap-api.herokuapp.com/attempts/";
@@ -78,7 +60,7 @@ namespace reto.Pages
             // Score actual de Medalla 1 y medalla 2
             foreach (var attempt in ListAttempts)
             {
-                if (attempt.Username == "alberto")
+                if (attempt.Username == Username)
                 {
                     ScoreMedals[0]++;
                     if (attempt.Score == 100 && attempt.Attempt == 1)
@@ -87,6 +69,21 @@ namespace reto.Pages
                     }
                 }
             }
+
+            // Abre la conexión a la base de datos del sistema 
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
+            MySqlConnection conexion = new MySqlConnection(connectionString);
+
+            // Ejecuta un stored procedure para obtener el dato de la medalla mantenerse en el top 10
+            conexion.Open();
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conexion;
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "DaysInTopTen";
+            cmd.Parameters.AddWithValue("@Username", Username);
+            var reader1 = cmd.ExecuteReader();
+            if(!reader1.Read()) ScoreMedals[2] = (int)reader1["Days"];
+            conexion.Close();
 
             // Gets current rank of medal 1
             int rank_medal1 = 0;
@@ -103,7 +100,11 @@ namespace reto.Pages
             else if (ScoreMedals[1] >= 50 && ScoreMedals[1] < 100) rank_medal2 = 4;
 
             // Get current rank of medal 3
-            //
+            int rank_medal3 = 0;
+            if (ScoreMedals[2] == 1) rank_medal3 = 1;
+            else if (ScoreMedals[2] > 1 && ScoreMedals[2] < 30) rank_medal3 = 2;
+            else if (ScoreMedals[2] >= 30 && ScoreMedals[2] < 180) rank_medal3 = 3;
+            else if (ScoreMedals[2] >= 180 && ScoreMedals[2] < 365) rank_medal3 = 4;
 
             // Retoma la conexión usada en la parte previa del método
             conexion.Open();
@@ -178,7 +179,23 @@ namespace reto.Pages
                     }
                     else if (medal.Id_medal == 3)
                     {
+                        if (rank_medal3 > medal.Rank)
+                        {
+                            conexion.Open();
+                            var query = @"UPDATE user_medal SET user_medal.rank=@rank WHERE id_user=@id_user AND id_medal=@id_medal";
+                            MySqlCommand update = new MySqlCommand(query, conexion);
+                            update.Parameters.AddWithValue("@rank", rank_medal3);
+                            update.Parameters.AddWithValue("@id_user", HttpContext.Session.GetInt32("local_id"));
+                            update.Parameters.AddWithValue("@id_medal", 3);
+                            update.ExecuteNonQuery();
+                            conexion.Close();
 
+                            Medals[2] = rank_medal3;
+                        }
+                        else
+                        {
+                            Medals[2] = medal.Rank;
+                        }
                     }
                 }
             }
@@ -209,7 +226,21 @@ namespace reto.Pages
                     cmd.ExecuteNonQuery();
                     conexion.Close();
 
-                    Medals[1] = rank_medal1;
+                    Medals[1] = rank_medal2;
+                }
+
+                if (rank_medal3 > 0)
+                {
+                    conexion.Open();
+                    var query = "INSERT INTO user_medal(id_user, id_medal, user_medal.rank) VALUES(@id_user, @id_medal, @rank)";
+                    cmd = new MySqlCommand(query, conexion);
+                    cmd.Parameters.AddWithValue("@id_user", HttpContext.Session.GetInt32("local_id"));
+                    cmd.Parameters.AddWithValue("@id_medal", 3);
+                    cmd.Parameters.AddWithValue("@rank", rank_medal2);
+                    cmd.ExecuteNonQuery();
+                    conexion.Close();
+
+                    Medals[2] = rank_medal3;
                 }
             }
 
@@ -236,7 +267,7 @@ namespace reto.Pages
             var top10 = scores.Take(n);
 
             // Abre la conexión a la base de datos del sistema 
-            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
             MySqlConnection conexion = new MySqlConnection(connectionString);
             conexion.Open();
             MySqlCommand cmd = new MySqlCommand();
