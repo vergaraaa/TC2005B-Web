@@ -35,6 +35,9 @@ namespace reto.Pages
 
         public int[] ScoreMedals { get; set; } = new int[3];
 
+        public int Min_grade { get; set; }
+        public int Max_grade { get; set; }
+
         [BindProperty]
         public IList<Attempts> ListAttempts { get; set; }
 
@@ -61,18 +64,29 @@ namespace reto.Pages
 
                 ListAttempts = JsonConvert.DeserializeObject<List<Attempts>>(json);
 
+                int cont = 0; int max_grade = 0; int min_grade = 100;
+
                 // Score actual de Medalla 1 y medalla 2
                 foreach (var attempt in ListAttempts)
                 {
-                    if (attempt.Username == Username)
+                    if (attempt.Username == "alberto")
                     {
                         ScoreMedals[0]++;
                         if (attempt.Score == 100 && attempt.Attempt == 1)
                         {
                             ScoreMedals[1]++;
                         }
+                        if (attempt.Score > max_grade) { max_grade = attempt.Score; }
+                        if (attempt.Score < min_grade) { min_grade = attempt.Score; }
+                        cont++;
                     }
                 }
+
+                if (cont == 0) { Min_grade = 0; }
+                else { Min_grade = min_grade; }
+
+                Max_grade = max_grade;
+
 
                 // Abre la conexión a la base de datos del sistema 
                 string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";

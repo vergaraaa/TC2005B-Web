@@ -21,16 +21,22 @@ namespace reto.Pages
             _logger = logger;
         }
 
-
+        public bool IsOnPost { get; set; }
         public IActionResult OnGet()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("username")))
             {
                 return new RedirectToPageResult("./Index");
             }
-            else { 
+            else {
+                IsOnPost = false;
                 return Page(); 
             }
+        }
+
+        public void OnPost()
+        {
+            IsOnPost = true;
         }
     }
 }

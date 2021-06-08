@@ -26,14 +26,12 @@
     function drawChart() {
         var data = google.visualization.arrayToDataTable([
             ["Intentos", "Calificaci\u00F3n", { role: 'annotation' }, { role: 'style' }],
-            @{ int cont = 0; int max_grade = 0; int min_grade = 100; }
+            @{ int cont = 0; }
             @foreach (var attempt in Model.ListAttempts) {
                 // NOTA: Aqui remplazar alberto por Model.Username al lanzar
                 @if (attempt.Username == "alberto")
                 {
                     <text>['@attempt.Attempt', @attempt.Score, '@attempt.ExamName', '#ff9900'],</text>
-                    @if (attempt.Score > max_grade) { max_grade = attempt.Score; }
-                    @if (attempt.Score < min_grade) { min_grade = attempt.Score; }
                     cont++;
                 }
                 @if (cont == 10)
@@ -43,12 +41,13 @@
             }
         ]);
         var options = {
+            height: 300,
             bars: 'horizontal',
             legend: { position: 'none' },
             title: "Ex\u00E1menes - Intentos y calificaciones",
             bar: { groupWidth: "80%", groupHeight: "100%" },
             hAxis: {
-                title: "Calificaci\u00F3n obtenida\n Mejor resultado: @max_grade% ",
+                title: "Calificaci\u00F3n obtenida",
                 titleTextStyle: {
                     italic: false
                 },
@@ -81,21 +80,35 @@
         <div class="col-lg-6 d-flex flex-column">
             <div class="row mb-lg-3">
                 <div class="col-lg-6 text-center" style="font-size: 1.25rem">
-                    Usuario: @Model.Username
+                    <p class="h4">Usuario:</p>  
+                    <p class="h4">@Model.Username</p>
                 </div>
                 <div class="col-lg-6 text-center mb-3" style="font-size: 1.25rem">
-                    Departamento(s): 
+                    <p class="h4">Departamento(s):</p>
                     @foreach (var department in Model.Departments)
                     {
-                        @department<br />
+                        <p class="h4">@department</p>
                     }
                 </div>
             </div>
-            <div id ="google-container"class="row flex-grow-1 mb-4">
-                <div id="google-chart" class="d-flex align-items-center">
-                    @if (cont == 0){
-                        <p class="h3" style="padding: 10%;">Complete un examen para obtener indicadores de rendimiento</p>
-                    }
+            <div class="row mb-5">
+                <div class="col-lg-6 text-center lighter-font" style="font-size: 1rem">
+                    Mejor resultado: @Model.Max_grade
+                </div>
+                <div class="col-lg-6 text-center lighter-font" style="font-size: 1rem">
+                    Resultado m&aacute;s bajo: @Model.Min_grade
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="google-container" class="row flex-grow-1 mb-4">
+                        <div id="google-chart" class="d-flex align-items-center">
+                            @if (cont == 0)
+                            {
+                                <p class="h3" style="padding: 10%;">Complete un examen para obtener indicadores de rendimiento</p>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,7 +116,7 @@
             <!-- FIRST REWARD -->
             <div class="row mb-5">
                 <div class="col-lg-12">
-                    <p class="h4">Recompensas ex&aacute;menes</p>
+                    <p class="h4 text-center">Recompensas ex&aacute;menes</p>
                     <div class="row align-items-center text-center mt-3">
                         <div class="col-lg-4 mb-3 lighter-font">
                             Obt&eacute;n este logro al resolver ex&aacute;menes.
@@ -142,7 +155,7 @@
             <!-- SECOND REWARD -->
             <div class="row mb-5">
                 <div class="col-lg-12">
-                    <p class="h4">Recompensas inmunidad</p>
+                    <p class="h4 text-center">Recompensas inmunidad</p>
                     <div class="row align-items-center text-center mt-3">
                         <div class="col-lg-4 mb-3 lighter-font">
                             Obt&eacute;n este logro al realizar ex&aacute;menes perfectos.
@@ -181,7 +194,7 @@
             <!-- THIRD REWARD -->
             <div class="row">
                 <div class="col-lg-12">
-                    <p class="h4">Recompensas por posici&oacute;n en tablero</p>
+                    <p class="h4 text-center">Recompensas por posici&oacute;n en tablero</p>
                     <div class="row align-items-center text-center mt-3">
                         <div class="col-lg-4 mb-3 lighter-font">
                             Obt&eacute;n este logro al ingresar y mantenerte en el leaderboard.
