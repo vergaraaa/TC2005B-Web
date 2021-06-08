@@ -4,19 +4,88 @@
     ViewData["Title"] = "Perfil";
 }
 
+<style>
+    #google-container {
+        border: solid 5px rgba(102, 102, 102, 0.25);
+        border-radius: 20px;
+        margin-right: 3%;
+    }
+
+    #google-chart {
+        width: 95%;
+        height: 95%;
+        margin: auto auto auto auto;
+        text-align: center;
+    }
+</style>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ["Intentos", "Nota", { role: 'annotation' }, { role: 'style' }],
+            @{ int cont = 0; }
+            @foreach (var attempt in Model.ListAttempts) {
+                @if (attempt.Username == Model.Username)
+                {
+                    <text>['@attempt.Attempt', @attempt.Score, '@attempt.ExamName', '#ff9900'],</text>
+                    cont++;
+                }
+                @if (cont == 10)
+                {
+                    break;
+                }
+            }
+        ]);
+        var options = {
+            bars: 'horizontal',
+            legend: { position: 'none' },
+            title: "Examenes realizados - Intentos y notas",
+            bar: { groupWidth: "80%", groupHeight: "100%" },
+            hAxis: {
+                title: "Nota obtenida",
+                viewWindow: {
+                    min: 0,
+                    max: 100
+                }
+            },
+            vAxis: {
+                title: "Intentos"
+            }
+        };
+        @if (cont > 0)
+        {
+            <text>var chart = new google.visualization.BarChart(document.getElementById('google-chart'));</text>
+            <text>chart.draw(data, options);</text>
+        }
+    }
+    function resizeChart() {
+        drawChart();
+    }
+    window.addEventListener("resize", resizeChart);
+</script>
+
 <div class="container mt-5">
     <div class="row p-5 mb-3" style="border: solid 5px rgba(102, 102, 102, 0.25); border-radius: 20px;">
-        <div class="col-lg-6">
-
+        <div class="col-lg-6 d-flex flex-column">
             <div class="row mb-lg-3">
                 <div class="col-lg-6 text-center" style="font-size: 1.25rem">
                     Usuario: @Model.Username
                 </div>
-                <div class="col-lg-6 text-center" style="font-size: 1.25rem">
-                    Departamentos: <br />
+                <div class="col-lg-6 text-center mb-3" style="font-size: 1.25rem">
+                    Departamento(s): 
                     @foreach (var department in Model.Departments)
                     {
                         @department<br />
+                    }
+                </div>
+            </div>
+            <div id ="google-container"class="row flex-grow-1 mb-4">
+                <div id="google-chart" class="d-flex align-items-center">
+                    @if (cont == 0){
+                        <p class="h3" style="padding: 10%;">Complete un examen para obtener indicadores de rendimiento</p>
                     }
                 </div>
             </div>
