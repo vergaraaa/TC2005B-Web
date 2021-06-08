@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
+using reto.Models;
 
 namespace reto.Pages
 {
@@ -25,14 +26,13 @@ namespace reto.Pages
 
         public string Username { get; set; }
 
-        public class Helper
-        {
-            public string Username { get; set; }
-            public int Score { get; set; }
-        }
-
         public async Task OnGet()
         {
+            if(HttpContext.Session.GetString("username") == "")
+            {
+                RedirectToAction("Login", "/");
+            }
+
             Username = HttpContext.Session.GetString("username");
 
             Uri baseURL = new Uri("https://chatarrap-api.herokuapp.com/attempts/scoresWeek");

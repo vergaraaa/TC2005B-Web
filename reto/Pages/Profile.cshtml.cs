@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using MySql.Data.MySqlClient;
 using System.Data;
+using reto.Models;
 
 namespace reto.Pages
 {
@@ -29,46 +30,21 @@ namespace reto.Pages
         public IList<string> Departments { get; set; }
         public string Token { get; set; }
         public string Id { get; set; }
-        public class Helper
-        {
-            public string Username { get; set; }
-            public int Score { get; set; }
-        }
 
-        public int Medal1 { get; set; }
-        public int Medal2 { get; set; }
-        public int Medal3 { get; set; }
+        public int[] Medals { get; set; } = new int[3];
 
-        public int ScoreMedal1 { get; set; }
-        public int ScoreMedal2 { get; set; }
-        public int ScoreMedal3 { get; set; }
-
-        public class Attempts
-        {
-            public string Id { get; set; }
-            public string Username { get; set; }
-            public string ExamName { get; set; }
-            public string ExamID { get; set; }
-            public int Score { get; set; }
-            public int Attempt { get; set; }
-            public DateTime Date { get; set; }
-            public DateTime CreatedAt { get; set; }
-            public DateTime UpdatedAt { get; set; }
-            public int V { get; set; }
-        }
+        public int[] ScoreMedals { get; set; } = new int[3];
 
         [BindProperty]
         public IList<Attempts> ListAttempts { get; set; }
 
-        private class Medals
-        {
-            public int Id_user { get; set; }
-            public int Id_medal { get; set; }
-            public int Rank { get; set; }
-        }
-
         public async Task OnGet()
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                RedirectToPage();
+            }
+
             Username = HttpContext.Session.GetString("username");
             Departments = JsonConvert.DeserializeObject<List<string>>(HttpContext.Session.GetString("departments"));
             await ActualizaTopDiez();
@@ -88,27 +64,27 @@ namespace reto.Pages
             {
                 if (attempt.Username == "alberto")
                 {
-                    ScoreMedal1++;
+                    ScoreMedals[0]++;
                     if (attempt.Score == 100 && attempt.Attempt == 1)
                     {
-                        ScoreMedal2++;
+                        ScoreMedals[1]++;
                     }
                 }
             }
 
             // Gets current rank of medal 1
             int rank_medal1 = 0;
-            if (ScoreMedal1 >= 1 && ScoreMedal1 < 5) rank_medal1 = 1;
-            else if (ScoreMedal1 >= 5 && ScoreMedal1 < 10) rank_medal1 = 2;
-            else if (ScoreMedal1 >= 10 && ScoreMedal1 < 50) rank_medal1 = 3;
-            else if (ScoreMedal1 >= 50 && ScoreMedal1 < 100) rank_medal1 = 4;
+            if (ScoreMedals[0] >= 1 && ScoreMedals[0] < 5) rank_medal1 = 1;
+            else if (ScoreMedals[0] >= 5 && ScoreMedals[0] < 10) rank_medal1 = 2;
+            else if (ScoreMedals[0] >= 10 && ScoreMedals[0] < 50) rank_medal1 = 3;
+            else if (ScoreMedals[0] >= 50 && ScoreMedals[0] < 100) rank_medal1 = 4;
 
             // Gets current rank of medal 2
             int rank_medal2 = 0;
-            if (ScoreMedal2 == 1) rank_medal2 = 1;
-            else if (ScoreMedal2 > 1 && ScoreMedal2 < 10) rank_medal2 = 2;
-            else if (ScoreMedal2 >= 10 && ScoreMedal2 < 50) rank_medal2 = 3;
-            else if (ScoreMedal2 >= 50 && ScoreMedal2 < 100) rank_medal2 = 4;
+            if (ScoreMedals[1] == 1) rank_medal2 = 1;
+            else if (ScoreMedals[1] > 1 && ScoreMedals[1] < 10) rank_medal2 = 2;
+            else if (ScoreMedals[1] >= 10 && ScoreMedals[1] < 50) rank_medal2 = 3;
+            else if (ScoreMedals[1] >= 50 && ScoreMedals[1] < 100) rank_medal2 = 4;
 
             // Get current rank of medal 3
             //
@@ -122,14 +98,14 @@ namespace reto.Pages
             cmd.CommandText = @"SELECT id_user, id_medal, user_medal.rank FROM user_medal WHERE id_user = @id_user";
             cmd.Parameters.AddWithValue("@id_user", HttpContext.Session.GetInt32("local_id"));
 
-            List<Medals> ListMedals = new List<Medals>();
-            Medals temp;
+            List<Medal> ListMedals = new List<Medal>();
+            Medal temp;
             
             using(var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    temp = new Medals
+                    temp = new Medal
                     {
                         Id_user = (int)reader["id_user"],
                         Id_medal = (int)reader["id_medal"],
@@ -158,11 +134,11 @@ namespace reto.Pages
                             update.ExecuteNonQuery();
                             conexion.Close();
 
-                            Medal1 = rank_medal1;
+                            Medals[0] = rank_medal1;
                         }
                         else
                         {
-                            Medal1 = medal.Rank;
+                            Medals[0] = medal.Rank;
                         }
                     }
                     else if (medal.Id_medal == 2)
@@ -178,11 +154,11 @@ namespace reto.Pages
                             update.ExecuteNonQuery();
                             conexion.Close();
 
-                            Medal2 = rank_medal2;
+                            Medals[1] = rank_medal2;
                         }
                         else
                         {
-                            Medal2 = medal.Rank;
+                           Medals[1] = medal.Rank;
                         }
                     }
                     else if (medal.Id_medal == 3)
@@ -204,7 +180,7 @@ namespace reto.Pages
                     cmd.ExecuteNonQuery();
                     conexion.Close();
 
-                    Medal1 = rank_medal1;
+                    Medals[0] = rank_medal1;
                 }
 
                 if (rank_medal2 > 0)
@@ -218,7 +194,7 @@ namespace reto.Pages
                     cmd.ExecuteNonQuery();
                     conexion.Close();
 
-                    Medal2 = rank_medal1;
+                    Medals[1] = rank_medal1;
                 }
             }
 

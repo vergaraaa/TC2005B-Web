@@ -5,9 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+
 
 namespace reto.Pages
 {
+
     public class ExamModel : PageModel
     {
 
@@ -17,6 +20,7 @@ namespace reto.Pages
         {
             _logger = logger;
         }
+
 
         public void OnGet()
         {
