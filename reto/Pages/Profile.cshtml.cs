@@ -48,8 +48,24 @@ namespace reto.Pages
             Username = HttpContext.Session.GetString("username");
             Departments = JsonConvert.DeserializeObject<List<string>>(HttpContext.Session.GetString("departments"));
             await ActualizaTopDiez();
-            int daysInTop10 = 2;
 
+            // Abre la conexión a la base de datos del sistema 
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
+            MySqlConnection conexion = new MySqlConnection(connectionString);
+
+            // Ejecuta un stored procedure para obtener el dato de la medalla mantenerse en el top 10
+            conexion.Open();
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = conexion;
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "DaysInTopTen";
+            cmd.Parameters.AddWithValue("@Username", Username);
+            var reader1 = cmd.ExecuteReader();
+            reader1.Read();
+            int daysInTop10 = (int)reader1["Days"];
+            conexion.Close();
+
+            // Realiza la conexión al API de Ternium para calcular las medallas
             string url = "https://chatarrap-api.herokuapp.com/attempts/";
             Uri baseURL = new Uri(url);
             HttpClient client = new HttpClient();
@@ -89,10 +105,9 @@ namespace reto.Pages
             // Get current rank of medal 3
             //
 
-            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
-            MySqlConnection conexion = new MySqlConnection(connectionString);
+            // Retoma la conexión usada en la parte previa del método
             conexion.Open();
-            MySqlCommand cmd = new MySqlCommand();
+            cmd = new MySqlCommand();
             cmd.Connection = conexion;
 
             cmd.CommandText = @"SELECT id_user, id_medal, user_medal.rank FROM user_medal WHERE id_user = @id_user";
@@ -216,10 +231,12 @@ namespace reto.Pages
             // Obtiene los primeros 10 lugares al momento del leaderboard, o menos si hay menos
             var scores = JsonConvert.DeserializeObject<List<Helper>>(json);
             int n = Math.Min(scores.Count, 10);
+
+            // Esta función depende en la condición actual donde los scores se devuelven de mayor a menor
             var top10 = scores.Take(n);
 
             // Abre la conexión a la base de datos del sistema 
-            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
             MySqlConnection conexion = new MySqlConnection(connectionString);
             conexion.Open();
             MySqlCommand cmd = new MySqlCommand();
