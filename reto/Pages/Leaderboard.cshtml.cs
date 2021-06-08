@@ -81,7 +81,7 @@ namespace reto.Pages
             else if (OptionType == 1)
             {
                 OptionType = 1;
-                string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
+                string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
 
                 MySqlConnection conexion = new MySqlConnection(connectionString);
                 conexion.Open();

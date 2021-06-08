@@ -71,7 +71,7 @@ namespace reto.Pages
             }
 
             // Abre la conexión a la base de datos del sistema 
-            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
             MySqlConnection conexion = new MySqlConnection(connectionString);
 
             // Ejecuta un stored procedure para obtener el dato de la medalla mantenerse en el top 10
@@ -267,7 +267,7 @@ namespace reto.Pages
             var top10 = scores.Take(n);
 
             // Abre la conexión a la base de datos del sistema 
-            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
             MySqlConnection conexion = new MySqlConnection(connectionString);
             conexion.Open();
             MySqlCommand cmd = new MySqlCommand();
