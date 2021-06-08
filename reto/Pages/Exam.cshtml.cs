@@ -22,9 +22,15 @@ namespace reto.Pages
         }
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("username")))
+            {
+                return new RedirectToPageResult("./Index");
+            }
+            else { 
+                return Page(); 
+            }
         }
     }
 }

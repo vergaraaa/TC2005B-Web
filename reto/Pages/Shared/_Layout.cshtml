@@ -36,10 +36,10 @@
                             <a class="nav-link ml-4 px-4 btn-lg @(Context.Request.Path == "/Exam" ? "active-menu": "")" asp-page="/Exam">EXAMEN</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link ml-4 px-4 btn-lg @(Context.Request.Path == "/Leaderboard" ? "active-menu": "")" asp-page="/Leaderboard">LEADERBOARD</a>
+                            <a class="nav-link ml-4 px-4 btn-lg @(Context.Request.Path == "/" ? "active-menu": "")" asp-page="/Leaderboard">LEADERBOARD</a>
                         </li>
                         <li class="nav-item ml-auto">
-                            <a class="nav-link btn-lg" asp-page="/Index"><i class="fas fa-sign-out-alt"></i></a>
+                            <a class="nav-link btn-lg" asp-page="/Logout"><i class="fas fa-sign-out-alt"></i></a>
                         </li>
                     </ul>
                 </div>

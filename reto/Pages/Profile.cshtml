@@ -26,13 +26,14 @@
     function drawChart() {
         var data = google.visualization.arrayToDataTable([
             ["Intentos", "Calificaci\u00F3n", { role: 'annotation' }, { role: 'style' }],
-            @{ int cont = 0; int max_grade = 0; }
+            @{ int cont = 0; int max_grade = 0; int min_grade = 100; }
             @foreach (var attempt in Model.ListAttempts) {
                 // NOTA: Aqui remplazar alberto por Model.Username al lanzar
                 @if (attempt.Username == "alberto")
                 {
                     <text>['@attempt.Attempt', @attempt.Score, '@attempt.ExamName', '#ff9900'],</text>
                     @if (attempt.Score > max_grade) { max_grade = attempt.Score; }
+                    @if (attempt.Score < min_grade) { min_grade = attempt.Score; }
                     cont++;
                 }
                 @if (cont == 10)
@@ -47,14 +48,20 @@
             title: "Ex\u00E1menes - Intentos y calificaciones",
             bar: { groupWidth: "80%", groupHeight: "100%" },
             hAxis: {
-                title: "Calificaci\u00F3n obtenida\n (Mejor resultado: @max_grade%)",
+                title: "Calificaci\u00F3n obtenida\n Mejor resultado: @max_grade% ",
+                titleTextStyle: {
+                    italic: false
+                },
                 viewWindow: {
                     min: 0,
                     max: 100
                 }
             },
             vAxis: {
-                title: "Intentos"
+                title: "Intentos",
+                titleTextStyle: {
+                    italic: false
+                }
             }
         };
         @if (cont > 0)

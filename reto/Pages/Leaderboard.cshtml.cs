@@ -26,24 +26,27 @@ namespace reto.Pages
 
         public string Username { get; set; }
 
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            if(HttpContext.Session.GetString("username") == "")
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("username")))
             {
-                RedirectToAction("Login", "/");
+                return new RedirectToPageResult("./Index");
             }
+            else
+            {
+                Username = HttpContext.Session.GetString("username");
 
-            Username = HttpContext.Session.GetString("username");
+                Uri baseURL = new Uri("https://chatarrap-api.herokuapp.com/attempts/scoresWeek");
+                HttpClient client = new HttpClient();
 
-            Uri baseURL = new Uri("https://chatarrap-api.herokuapp.com/attempts/scoresWeek");
-            HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
 
-            client.DefaultRequestHeaders.Add("auth_key", HttpContext.Session.GetString("token"));
+                var response = await client.GetAsync(baseURL);
+                var json = await response.Content.ReadAsStringAsync();
 
-            var response = await client.GetAsync(baseURL);
-            var json = await response.Content.ReadAsStringAsync();
-
-            Leaderboard = JsonConvert.DeserializeObject<List<Helper>>(json);
+                Leaderboard = JsonConvert.DeserializeObject<List<Helper>>(json);
+                return Page();
+            }
         }
 
         [BindProperty]
@@ -81,7 +84,7 @@ namespace reto.Pages
             else if (OptionType == 1)
             {
                 OptionType = 1;
-                string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Al.730550;";
+                string connectionString = "Server=127.0.0.1;Port=3306;Database=db_ternium;Uid=root;password=Tijuana13!;";
 
                 MySqlConnection conexion = new MySqlConnection(connectionString);
                 conexion.Open();

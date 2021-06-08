@@ -19,11 +19,15 @@ namespace reto.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            if (HttpContext.Session.GetString("username") == "")
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("username")))
             {
-                RedirectToAction("Login", "/");
+                return new RedirectToPageResult("./Index");
+            }
+            else
+            {
+                return Page();
             }
         }
     }
