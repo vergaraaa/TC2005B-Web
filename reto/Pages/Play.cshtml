@@ -26,12 +26,12 @@
 
 <div id="gameContainer">
     <canvas id="unity-canvas" data-pixel-art="true"></canvas>
-    <script src="~/Build/Build_Semana9.loader.js"></script>
+    <script src="~/Build/Build.loader.js"></script>
     <script>
         createUnityInstance(document.querySelector("#unity-canvas"), {
-            dataUrl: "Build/Build_Semana9.data",
-            frameworkUrl: "Build/Build_Semana9.framework.js",
-            codeUrl: "Build/Build_Semana9.wasm",
+            dataUrl: "Build/Build.data",
+            frameworkUrl: "Build/Build.framework.js",
+            codeUrl: "Build/Build.wasm",
             streamingAssetsUrl: "StreamingAssets",
             companyName: "DefaultCompany",
             productName: "Proyecto Final",
@@ -74,8 +74,10 @@
             window.addEventListener('resize', onResize);
             onResize();
 
-            console.log(@Model.ID.ToString());
+            // Enviar informacion a Unity
             instance.SendMessage('CanvasAudio', 'setID', @Model.ID);
+            instance.SendMessage('CanvasAudio', 'setAuthKey', '@Model.Token');
+            instance.SendMessage('CanvasAudio', 'setDepartment', '@Model.Departments[0]');
         });
     </script>
 </div>

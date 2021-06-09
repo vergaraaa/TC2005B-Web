@@ -14,6 +14,8 @@ namespace reto.Pages
     {
 
         public int ID { get; set; }
+        public string Token { get; set; }
+        public IList<string> Departments { get; set; }
 
         private readonly ILogger<PlayModel> _logger;
 
@@ -31,6 +33,9 @@ namespace reto.Pages
             else
             {
                 ID = (int) HttpContext.Session.GetInt32("local_id");
+                Token = HttpContext.Session.GetString("token");
+                Departments = JsonConvert.DeserializeObject<List<string>>(HttpContext.Session.GetString("departments"));
+
                 return Page();
             }
         }
