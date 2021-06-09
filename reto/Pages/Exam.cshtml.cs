@@ -24,6 +24,7 @@ namespace reto.Pages
         public bool IsOnPost { get; set; }
         public IActionResult OnGet()
         {
+            // Verificamos que el usuario haya iniciado sesión
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("username")))
             {
                 return new RedirectToPageResult("./Index");

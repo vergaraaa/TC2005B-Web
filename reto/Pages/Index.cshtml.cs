@@ -59,28 +59,27 @@ namespace reto.Pages
 
                 if (responseContent != "[]")
                 {
-                    // Definition of variables that will be reused through this method
+                    // Definimos las variables que usaremos en este método
                     int id_user;
                     string query;
 
-                    // Connect to the database using our local credentials
+                    // Conectamos la base de datos
                     string db_string = @"server=127.0.0.1;uid=root;password=Tijuana13!;database=db_ternium";
                     MySqlConnection conexion = new MySqlConnection(db_string);
                     conexion.Open();
 
-                    // For better readability, use caps accordingly in sql commands
                     query = "SELECT id_user FROM user WHERE username = @username";
                     MySqlCommand cmd = new MySqlCommand(query, conexion);
                     cmd.Parameters.AddWithValue("@username", User.Username);
                     var reader = cmd.ExecuteReader();
 
-                    // Read returns false when no values were obtained from the query above
+                    // Read regresa falso cuando no se obtiene ningún valor de la query
                     if (!reader.Read())
                     { 
-                        // Closes the previous connection read to allow further queries
+                        // Cerramos la conexión anterior para permitir futuras queries
                         conexion.Close();
 
-                        // Creates a new user and inserts it to the users table
+                        // Crea un nuevo usuario y lo inserta en la tabla de usuarios
                         conexion.Open();
                         query = "INSERT INTO user(username) VALUES (@username)";
                         cmd = new MySqlCommand(query, conexion);
@@ -91,12 +90,12 @@ namespace reto.Pages
                     }
                     else
                     {
-                        // Closes the previous connection read to allow further queries
+                        // Cerramos la conexión para permitir futuras queries
                         conexion.Close();
                     }
 
-                    // With either an old user or one just created above, its login is recorded in the session table
-                    // Part 1: The users id is recovered from the users table
+                    // Ya sea un nuevo usuario o ya registrado, insertamos la sesión en la base de datos
+                    // Obtenemos el id del usuario
                     conexion.Open();
                     query = "SELECT id_user FROM user WHERE username = @username";
                     cmd = new MySqlCommand(query, conexion);
@@ -106,7 +105,7 @@ namespace reto.Pages
                     id_user = Convert.ToInt32(reader["id_user"]);
                     conexion.Close();
 
-                    // Part 2: The user id and the time are logged to the session table
+                    // Insertamos la sesión en la base de datos
                     conexion.Open();
                     query = "INSERT INTO session(id_user, timestamp) VALUES (@id_user, @timestamp)";
                     cmd = new MySqlCommand(query, conexion);
@@ -115,17 +114,17 @@ namespace reto.Pages
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
 
-                    // The connection to the database is closed and we can allow through the logged user
+                    // Cerramos la conexión a la base de datos
                     conexion.Close();
 
-                    // Session variables
+                    // Establecer variables de sesión
                     var parsedObj = JObject.Parse(responseContent);
                     HttpContext.Session.SetString("id", parsedObj["user"].ToString());
                     HttpContext.Session.SetString("username", User.Username);
                     HttpContext.Session.SetString("token", parsedObj["token"].ToString());
                     HttpContext.Session.SetInt32("local_id", id_user);
 
-                    // Set departments in session variable
+                    // Código para guardar las variables de sesión
                     client.DefaultRequestHeaders.Add("auth_key", parsedObj["token"].ToString());
 
                     response = await client.GetAsync("https://chatarrap-api.herokuapp.com/users/" + parsedObj["user"].ToString());
@@ -137,12 +136,14 @@ namespace reto.Pages
                 }
                 else
                 {
+                    // Si hay error regresamos al login
                     Error = "Credenciales incorrectas";
                     return Page();
                 }
             }
             else
             {
+                // Si hay error regresamos al login
                 Error = "Credenciales incorrectas";
                 return Page();
             }

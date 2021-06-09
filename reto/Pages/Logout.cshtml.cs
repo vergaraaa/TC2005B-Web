@@ -20,7 +20,10 @@ namespace reto.Pages
 
         public IActionResult OnGet()
         {
+            // Limpiamos las variables de sesión
             HttpContext.Session.Clear();
+            
+            // Redireccionamos al login
             return new RedirectToPageResult("./Index");
         }
     }
