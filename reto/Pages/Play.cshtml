@@ -60,7 +60,7 @@
                 else {
                     canvas.style.height = h - top_h + "px";
                     canvas.style.width = Math.round((h - top_h) * scale_ratio) + "px";
-                }   
+                }
 
                 // TERMINA CÓDIGO PERSONALIZADO PARA RESPONSIVIDAD jiji
             }
@@ -73,6 +73,9 @@
             }
             window.addEventListener('resize', onResize);
             onResize();
+
+            console.log(@Model.ID.ToString());
+            instance.SendMessage('CanvasAudio', 'setID', @Model.ID);
         });
     </script>
 </div>

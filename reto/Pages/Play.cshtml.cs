@@ -6,11 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace reto.Pages
 {
     public class PlayModel : PageModel
     {
+
+        public int ID { get; set; }
 
         private readonly ILogger<PlayModel> _logger;
 
@@ -27,6 +30,7 @@ namespace reto.Pages
             }
             else
             {
+                ID = (int) HttpContext.Session.GetInt32("local_id");
                 return Page();
             }
         }
