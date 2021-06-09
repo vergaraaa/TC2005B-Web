@@ -82,10 +82,9 @@ namespace reto.Pages
 
                         // Creates a new user and inserts it to the users table
                         conexion.Open();
-                        query = "INSERT INTO user(username, department) VALUES (@username, @department)";
+                        query = "INSERT INTO user(username) VALUES (@username)";
                         cmd = new MySqlCommand(query, conexion);
                         cmd.Parameters.AddWithValue("@username", User.Username);
-                        cmd.Parameters.AddWithValue("@department", "Chatarreria"); // Here Chatarreria is used as a default type
                         cmd.Prepare();
                         cmd.ExecuteNonQuery();
                         conexion.Close();
